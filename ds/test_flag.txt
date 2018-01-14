@@ -1,0 +1,2 @@
+--flights_data=/home/jen/Documents/fly/code/atc/ds/sample_adsb_decoded.csv
+--logging_file=/home/jen/Documents/fly/code/atc/ds/test.log
