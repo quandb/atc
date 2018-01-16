@@ -1,10 +1,5 @@
-# See: http://docs.python.org/library/pkgutil.html#pkgutil.extend_path
-from pkgutil import extend_path
-__path__ = extend_path(__path__, __name__)
-
-
-import flags
-import flag_parsers
+from atc.flags import flags
+from atc.flags import flag_parsers
 
 FlagType = flag_parsers.FlagType
 create = flags.Flags.create

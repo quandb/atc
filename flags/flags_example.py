@@ -20,7 +20,7 @@ Examples of using Flags:
   >> Hello Mr. Chocolate
      Go away!
 """
-from tenpoint7 import flags
+from atc import flags
 
 name = flags.create("name", flags.FlagType.STRING, 'Name of the person',
                     required=True)

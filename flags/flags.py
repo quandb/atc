@@ -6,9 +6,9 @@ from io import StringIO
 import six
 from six import iteritems
 
-import exceptions
-import flag_parsers
-from exceptions import IllegalFlagValueError
+from atc.flags import exceptions
+from atc.flags import flag_parsers
+from atc.flags.exceptions import IllegalFlagValueError
 
 class Flags(object):
   def __init__(self):
@@ -205,9 +205,9 @@ class Flags(object):
         handle.write('--%s=%s\n' % (name, flag_value))
 
     if is_s3:
+      pass
       # S3Load.upload_text_data(
       #     handle.getvalue(), '%s/flagfile' % output_flagfile)
-      pass
 
     if handle is not sys.stdout:
       handle.close()

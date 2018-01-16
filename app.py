@@ -1,90 +1,86 @@
-import pandas as pd
 import logging
 
-from scipy import interpolate
-import matplotlib.pyplot as plt
-import seaborn as sns
+from atc import flags
 
-import flags
-
+from lib import AutomatedTrajectoryClustering
 
 flights_data_flag = flags.create(
     'flights_data',
     flags.FlagType.STRING,
     "Full path to the trajectory file",
     required=True)
-
 logging_file_flag = flags.create(
     'logging_file',
     flags.FlagType.STRING,
     "Full path to the logging file",
     required=True)
+lat_column_flag = flags.create(
+  'lat_column',
+  flags.FlagType.STRING,
+  "Latitude column",
+  default='Lat')
+lon_column_flag = flags.create(
+  'lon_column',
+  flags.FlagType.STRING,
+  "Longitude column",
+  default='Lon')
+time_column_flag = flags.create(
+  'time_column',
+  flags.FlagType.STRING,
+  "Time column",
+  default='TRemains')
+source_column_flag = flags.create(
+  'source_column',
+  flags.FlagType.STRING,
+  "Source airport column",
+  default='O')
+source_airport_flag = flags.create(
+  'source_airport',
+  flags.FlagType.STRING,
+  "Source airport column",
+  required=True)
+des_column_flag = flags.create(
+  'des_column',
+  flags.FlagType.STRING,
+  "Destination airport column",
+  default='D')
+des_airport_flag = flags.create(
+  'des_airport',
+  flags.FlagType.STRING,
+  "Source airport column",
+  required=True)
+flight_id_column_flag = flags.create(
+  'flight_id_column',
+  flags.FlagType.STRING,
+  "Flight identify column",
+  default='ID')
+num_points_flag = flags.create(
+  'num_points',
+  flags.FlagType.INT,
+  "Number of points in the curve",
+  default=50)
 
 
-def load_and_filter_data():
-    """
-    Load data and perform filtering
-    Returns:
-      pandas data-frame
-
-    """
-    data = pd.read_csv(flights_data_flag.value())
-    return data[(data['icao']=='4840D5') & (data['callsign']=='KLM1986_')]
-    # return data[(data['icao']=='48520B') & (data['callsign']=='TRA58W__')]
-
-def interpolate_data(data):
-    """
-    Transform original data into uniform distribution
-    Args:
-      data:
-
-    Returns:
-
-    """
-    ''' Apply cubic-spline '''
-    fig, ax = plt.subplots(2)
-
-    sns.regplot(data['lon'], data['lat'], fit_reg=False, ax=ax[0])
-    x_new = data.sample(50)['lon']
-    tck = interpolate.splrep(
-        data['lon'].sort_values(), data['lat'].sort_values(), s=0)
-    y_new = interpolate.splev(x_new, tck, der=0)
-    print tck
-    print y_new
-    sns.regplot(x_new, y_new, fit_reg=False, ax=ax[1])
-    sns.plt.show()
-
-
-def perform_dimension_reduction(data):
-    """
-    Apply PCA to reduce dimension
-    Args:
-      data:
-
-    Returns:
-
-    """
-    pass
-
-def run_clustering(data):
-    """
-    Run DBSCAN
-    Args:
-      data: 
-
-    Returns:
-
-    """
-    pass
+def run():
+  atc_handler = AutomatedTrajectoryClustering(
+    filename=flights_data_flag.value(),
+    source_col=source_column_flag.value(),
+    des_col=des_column_flag.value(),
+    lat_col=lat_column_flag.value(),
+    lon_col=lon_column_flag.value(),
+    time_col=time_column_flag.value(),
+    flight_col=flight_id_column_flag.value()
+  )
+  atc_handler.run(
+    source_airport=source_airport_flag.value(),
+    des_airport=des_airport_flag.value(),
+    num_points=num_points_flag.value())
 
 
 if __name__ == '__main__':
-    flags.parse_flags()
-    logging.basicConfig(
-        filename=logging_file_flag.value(),
-        level=logging.DEBUG,
-        format='%(asctime)s %(message)s')
-    flight_data = load_and_filter_data()
-    print "Len: ", len(flight_data)
-    print flight_data
-    interpolate_data(flight_data)
+  flags.parse_flags()
+  logging.basicConfig(
+    filename=logging_file_flag.value(),
+    level=logging.DEBUG,
+    format='%(asctime)s %(message)s')
+  run()

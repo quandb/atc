@@ -1,6 +1,6 @@
 from enum import Enum
 
-from exceptions import CantOpenFlagFileError, \
+from atc.flags.exceptions import CantOpenFlagFileError, \
   CantParseArgumentError, IllegalFlagValueError
 
 class FlagType(Enum):
