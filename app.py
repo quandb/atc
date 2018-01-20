@@ -1,8 +1,7 @@
 import logging
 
 from atc import flags
-
-from lib import AutomatedTrajectoryClustering
+from atc.lib import AutomatedTrajectoryClustering
 
 flights_data_flag = flags.create(
     'flights_data',
@@ -49,6 +48,11 @@ des_airport_flag = flags.create(
   flags.FlagType.STRING,
   "Source airport column",
   required=True)
+storage_path_flag = flags.create(
+  'storage_path',
+  flags.FlagType.STRING,
+  "Path to folder to store the outcome",
+  required=True)
 flight_id_column_flag = flags.create(
   'flight_id_column',
   flags.FlagType.STRING,
@@ -65,6 +69,8 @@ is_plot_flag = flags.create(
   "Plotting the routes",
   default=False)
 
+
+
 def run():
   atc_handler = AutomatedTrajectoryClustering(
     filename=flights_data_flag.value(),
@@ -73,7 +79,8 @@ def run():
     lat_col=lat_column_flag.value(),
     lon_col=lon_column_flag.value(),
     time_col=time_column_flag.value(),
-    flight_col=flight_id_column_flag.value()
+    flight_col=flight_id_column_flag.value(),
+    storage_path=storage_path_flag.value()
   )
   atc_handler.run(
     source_airport=source_airport_flag.value(),
@@ -87,5 +94,7 @@ if __name__ == '__main__':
   logging.basicConfig(
     filename=logging_file_flag.value(),
     level=logging.DEBUG,
-    format='%(asctime)s %(message)s')
+    format='%(asctime)s %(message)s',
+    filemode='w'
+  )
   run()

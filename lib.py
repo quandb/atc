@@ -8,11 +8,14 @@ import matplotlib.pyplot as plt
 from scipy.spatial.distance import directed_hausdorff
 from sklearn import preprocessing
 from sklearn.cluster.dbscan_ import DBSCAN
+from sklearn.metrics import silhouette_score, silhouette_samples
+
+from atc.frechet import frechetDist
 
 
 class AutomatedTrajectoryClustering(object):
   def __init__(self, filename, source_col, des_col, lat_col, lon_col, time_col,
-               flight_col):
+               flight_col, storage_path):
     self.filename = filename
     self.source_column = source_col
     self.des_column = des_col
@@ -20,27 +23,30 @@ class AutomatedTrajectoryClustering(object):
     self.lon_column = lon_col
     self.time_column = time_col
     self.flight_column = flight_col
+    self.storage_path = storage_path
     self.__process_data = {}
+    self.labels = []
 
   def construct_dissimilarity_matrix(self):
     self.le_flight_id = preprocessing.LabelEncoder()
-    self.le_flight_id.fit(self.__process_data.keys())
+    self.le_flight_id.fit(list(self.__process_data.keys()))
     num_flights = len(self.__process_data)
     self.dissimilarity_matrix = np.ndarray(
-      shape=(num_flights,num_flights),
+      shape=(num_flights, num_flights),
       dtype=float)
-    for i in xrange(num_flights):
-      for j in xrange(num_flights):
+    for i in range(num_flights):
+      for j in range(num_flights):
         from_ = self.__process_data[self.le_flight_id.inverse_transform(i)]
         to_ = self.__process_data[self.le_flight_id.inverse_transform(j)]
         # print "Flight ID: ", self.le_flight_id.inverse_transform(i)
         # print from_['inter_lat']
         self.dissimilarity_matrix[i, j] = self.compute_the_distance(
-          u=zip(from_['inter_lon'], from_['inter_lat']),
-          v=zip(to_['inter_lon'], to_['inter_lat']))
+          u=list(zip(from_['inter_lon'], from_['inter_lat'])),
+          v=list(zip(to_['inter_lon'], to_['inter_lat'])))
 
   def compute_the_distance(self, u, v):
-    return directed_hausdorff(u, v)[0]
+    return frechetDist(u, v)
+    # return max(directed_hausdorff(u, v)[0], directed_hausdorff(v, u)[0])
 
   def run(self, source_airport, des_airport, num_points, is_plot):
     num_false_interpolate = 0
@@ -72,9 +78,11 @@ class AutomatedTrajectoryClustering(object):
         self.__process_data[flight_iden] = temp_dict
       else:
         num_false_interpolate += 1
+        logging.info("Failed to interpolate %s flight" % flight_iden)
 
     logging.info(
-      "There are %s false interpolate flights" % num_false_interpolate)
+      "There are %s/%s false interpolate flights" % (
+        num_false_interpolate, len(flight_ids)))
     ''' Visualize the coordinates '''
     if is_plot:
       self.coordinate_viz(
@@ -87,31 +95,67 @@ class AutomatedTrajectoryClustering(object):
         title="Interpolated Coordinate")
 
     ''' Build the Dissimilarity Matrix '''
+    logging.info("Constructing dissimilarity matrix")
     self.construct_dissimilarity_matrix()
 
-    ''' Perform the clustering '''
-    self.route_clustering()
+    ''' Perform the clustering with auto tuning parameters '''
+    self.auto_tuning(
+      eps_list=np.append(
+        self.sampling(self.dissimilarity_matrix[0], 50)[1:10], [3]),
+      min_sample_list=[3, 4, 5, 9, 16, 25, 36],
+      soure=source_airport, des=des_airport)
 
     ''' Clusters viz '''
-    self.cluster_viz(title="Route Clustering")
+    self.cluster_viz(title="Route Clustering for OD pair (%s-%s)" % (
+      source_airport, des_airport))
 
-  def route_clustering(self):
-    clf = DBSCAN(eps=5, min_samples=3)
-    self.labels = clf.fit_predict(self.dissimilarity_matrix)
-    print("LABELS for %s routes" % len(self.dissimilarity_matrix))
+  def route_clustering(self, params: dict) -> list:
+    clf = DBSCAN(**params)
+    return clf.fit_predict(self.dissimilarity_matrix)
+
+  def auto_tuning(self, eps_list, min_sample_list, soure, des):
+    tuning_res = []
+    tuning_res_append = tuning_res.append
+    best_silhouette = -1
+    for eps in eps_list:
+      for min_sample in min_sample_list:
+        logging.debug("(eps, min_sample): (%s, %s)" % (eps, min_sample))
+        params = {'eps': eps,
+                  'min_samples': min_sample,
+                  'metric': 'precomputed'}
+        labels = self.route_clustering(params)
+        params['#clusters'] = np.unique(labels)
+        logging.debug("\tLabels: %s" % labels)
+        try:
+          params['silhouette_score'] = silhouette_score(
+            self.dissimilarity_matrix, labels, metric='precomputed')
+        except ValueError as ve:
+          logging.error(ve)
+          params['silhouette_score'] = -2
+        tuning_res_append(params)
+        if params['silhouette_score'] > best_silhouette:
+          best_silhouette = params['silhouette_score']
+          self.labels = labels
+
+    ''' Store the tuning result '''
+    (pd.DataFrame(tuning_res)
+      .sort_values(by=['silhouette_score'], ascending=False)
+      .to_csv(
+        "%s/tuning_result_for_%s_%s.csv" % (self.storage_path, soure, des),
+        index=False))
 
   def cluster_viz(self, title='', pic=''):
     plt.style.use('ggplot')
     colorset = cycle(['purple', 'green', 'red', 'blue', 'orange'])
     for cluster_num in np.unique(self.labels):
-      clr, mar = (colorset.next(), 'o') if cluster_num != -1 else ('black', '.')
+      clr, al = (next(colorset), 1.) if cluster_num != -1 else ('grey', .3)
       for i_flight, run_cluster_number in enumerate(self.labels):
         if run_cluster_number == cluster_num:
           flight_data = self.__process_data[
             self.le_flight_id.inverse_transform(i_flight)]
           plt.scatter(
             flight_data['inter_lon'], flight_data['inter_lat'],
-            color=clr, marker=mar, alpha=1.0)
+            color=clr, marker='o', alpha=al, s=20)
     plt.xlabel("Longitude")
     plt.ylabel("Latitude")
     plt.title(title)
@@ -157,8 +201,8 @@ class AutomatedTrajectoryClustering(object):
 
     """
     # sample_value = signal.resample(values, num_points)
-    step_size = (values.max() - values.min())*1./num_points
-    sample_value = np.arange(values.min(), values.max(), step_size)
+    step_size = (max(values) - min(values))*1./num_points
+    sample_value = np.arange(min(values), max(values), step_size)
     return sample_value
 
   def load_data(self, source_airport, des_airport):
