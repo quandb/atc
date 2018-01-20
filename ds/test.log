@@ -1,218 +1,196 @@
-2018-01-20 17:00:58,070 Get start to load data from (/home/alice/Documents/thesis/code/atc/ds/sample_feature.csv, NZCH, WSSS)
-2018-01-20 17:00:58,220 There are 4324 records for pair (source, des): (NZCH, WSSS)
-2018-01-20 17:00:58,223 There are 161 records for flight: SIA298-1485730800-schedule-0001:1
-2018-01-20 17:00:58,225 There are 145 records for flight: SIA298-1485817200-schedule-0001:1
-2018-01-20 17:00:58,225 Failed to interpolate SIA298-1485817200-schedule-0001:1 flight
-2018-01-20 17:00:58,227 There are 216 records for flight: SIA298-1485903600-schedule-0000:1
-2018-01-20 17:00:58,229 There are 214 records for flight: SIA298-1485990000-schedule-0000:1
-2018-01-20 17:00:58,231 There are 181 records for flight: SIA298-1486162800-schedule-0000:1
-2018-01-20 17:00:58,233 There are 158 records for flight: SIA296-1486171200-schedule-0001:1
-2018-01-20 17:00:58,233 Failed to interpolate SIA296-1486171200-schedule-0001:1 flight
-2018-01-20 17:00:58,235 There are 228 records for flight: SIA298-1486249200-schedule-0001:1
-2018-01-20 17:00:58,236 Failed to interpolate SIA298-1486249200-schedule-0001:1 flight
-2018-01-20 17:00:58,237 There are 151 records for flight: SIA298-1486335600-schedule-0000:1
-2018-01-20 17:00:58,238 Failed to interpolate SIA298-1486335600-schedule-0000:1 flight
-2018-01-20 17:00:58,239 There are 182 records for flight: SIA298-1486422000-schedule-0001:1
-2018-01-20 17:00:58,241 There are 178 records for flight: SIA298-1486508400-schedule-0000:1
-2018-01-20 17:00:58,243 There are 197 records for flight: SIA298-1486594800-schedule-0000:1
-2018-01-20 17:00:58,244 There are 197 records for flight: SIA298-1486681200-schedule-0000:1
-2018-01-20 17:00:58,246 There are 140 records for flight: SIA298-1486767600-schedule-0001:1
-2018-01-20 17:00:58,248 There are 119 records for flight: SIA298-1486854000-schedule-0001:1
-2018-01-20 17:00:58,250 There are 177 records for flight: SIA298-1486940400-schedule-0003:1
-2018-01-20 17:00:58,251 There are 153 records for flight: SIA298-1487026800-schedule-0001:1
-2018-01-20 17:00:58,253 There are 136 records for flight: SIA298-1487113200-schedule-0000:1
-2018-01-20 17:00:58,255 There are 109 records for flight: SIA298-1487199600-schedule-0001:1
-2018-01-20 17:00:58,257 There are 182 records for flight: SIA298-1487286000-schedule-0000:0
-2018-01-20 17:00:58,258 There are 111 records for flight: SIA298-1487372400-schedule-0000:1
-2018-01-20 17:00:58,260 There are 147 records for flight: SIA298-1487458800-schedule-0000:1
-2018-01-20 17:00:58,262 There are 133 records for flight: SIA298-1487545200-schedule-0000:1
-2018-01-20 17:00:58,264 There are 146 records for flight: SIA298-1487631600-schedule-0000:1
-2018-01-20 17:00:58,266 There are 117 records for flight: SIA298-1487718000-schedule-0001:1
-2018-01-20 17:00:58,267 There are 122 records for flight: SIA298-1487804400-schedule-0000:0
-2018-01-20 17:00:58,269 There are 122 records for flight: SIA298-1487890800-schedule-0000:1
-2018-01-20 17:00:58,271 There are 107 records for flight: SIA298-1487977200-schedule-0002:1
-2018-01-20 17:00:58,273 There are 95 records for flight: SIA298-1488063600-schedule-0001:1
-2018-01-20 17:00:58,273 There are 4/28 false interpolate flights
-2018-01-20 17:01:12,147 (eps, min_sample): (0.182073494366, 3)
-2018-01-20 17:01:12,147 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,147 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,147 (eps, min_sample): (0.182073494366, 4)
-2018-01-20 17:01:12,148 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,148 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,148 (eps, min_sample): (0.182073494366, 5)
-2018-01-20 17:01:12,148 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,149 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,149 (eps, min_sample): (0.182073494366, 9)
-2018-01-20 17:01:12,149 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,149 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,149 (eps, min_sample): (0.182073494366, 16)
-2018-01-20 17:01:12,150 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,150 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,150 (eps, min_sample): (0.182073494366, 25)
-2018-01-20 17:01:12,150 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,150 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,150 (eps, min_sample): (0.182073494366, 36)
-2018-01-20 17:01:12,151 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,151 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,151 (eps, min_sample): (0.364146988732, 3)
-2018-01-20 17:01:12,151 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,151 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,151 (eps, min_sample): (0.364146988732, 4)
-2018-01-20 17:01:12,152 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,152 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,152 (eps, min_sample): (0.364146988732, 5)
-2018-01-20 17:01:12,152 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,152 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,153 (eps, min_sample): (0.364146988732, 9)
-2018-01-20 17:01:12,153 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,153 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,153 (eps, min_sample): (0.364146988732, 16)
-2018-01-20 17:01:12,153 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,154 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,154 (eps, min_sample): (0.364146988732, 25)
-2018-01-20 17:01:12,154 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,154 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,154 (eps, min_sample): (0.364146988732, 36)
-2018-01-20 17:01:12,155 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,155 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,155 (eps, min_sample): (0.546220483098, 3)
-2018-01-20 17:01:12,155 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,155 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,155 (eps, min_sample): (0.546220483098, 4)
-2018-01-20 17:01:12,156 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,156 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,156 (eps, min_sample): (0.546220483098, 5)
-2018-01-20 17:01:12,156 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,156 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,156 (eps, min_sample): (0.546220483098, 9)
-2018-01-20 17:01:12,157 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,157 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,157 (eps, min_sample): (0.546220483098, 16)
-2018-01-20 17:01:12,157 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,157 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,158 (eps, min_sample): (0.546220483098, 25)
-2018-01-20 17:01:12,158 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,158 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,158 (eps, min_sample): (0.546220483098, 36)
-2018-01-20 17:01:12,158 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,159 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,159 (eps, min_sample): (0.728293977464, 3)
-2018-01-20 17:01:12,159 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1  1 -1 -1  0  0  0  1  1  0  0 -1 -1  0  1 -1  0]
-2018-01-20 17:01:12,159 (eps, min_sample): (0.728293977464, 4)
-2018-01-20 17:01:12,160 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1  1 -1 -1  0  0  0  1  1 -1  0 -1 -1  0  1 -1  0]
-2018-01-20 17:01:12,160 (eps, min_sample): (0.728293977464, 5)
-2018-01-20 17:01:12,160 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1 -1 -1 -1  0 -1  0 -1 -1 -1  0 -1 -1  0 -1 -1  0]
-2018-01-20 17:01:12,161 (eps, min_sample): (0.728293977464, 9)
-2018-01-20 17:01:12,161 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,161 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,161 (eps, min_sample): (0.728293977464, 16)
-2018-01-20 17:01:12,162 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,162 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,162 (eps, min_sample): (0.728293977464, 25)
-2018-01-20 17:01:12,162 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,162 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,162 (eps, min_sample): (0.728293977464, 36)
-2018-01-20 17:01:12,163 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,163 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,163 (eps, min_sample): (0.910367471831, 3)
-2018-01-20 17:01:12,163 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1  1 -1 -1  0  0  0  1  1  0  0 -1  0  0  1 -1  0]
-2018-01-20 17:01:12,164 (eps, min_sample): (0.910367471831, 4)
-2018-01-20 17:01:12,164 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1  1 -1 -1  0  0  0  1  1  0  0 -1  0  0  1 -1  0]
-2018-01-20 17:01:12,164 (eps, min_sample): (0.910367471831, 5)
-2018-01-20 17:01:12,165 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1 -1 -1 -1  0  0  0 -1 -1  0  0 -1  0  0 -1 -1  0]
-2018-01-20 17:01:12,165 (eps, min_sample): (0.910367471831, 9)
-2018-01-20 17:01:12,165 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1 -1 -1 -1  0  0  0 -1 -1 -1  0 -1  0  0 -1 -1  0]
-2018-01-20 17:01:12,166 (eps, min_sample): (0.910367471831, 16)
-2018-01-20 17:01:12,166 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,166 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,166 (eps, min_sample): (0.910367471831, 25)
-2018-01-20 17:01:12,167 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,167 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,167 (eps, min_sample): (0.910367471831, 36)
-2018-01-20 17:01:12,167 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,167 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,167 (eps, min_sample): (1.0924409662, 3)
-2018-01-20 17:01:12,168 	Labels: [ 0 -1  1  0 -1  1  1 -1  2 -1 -1  0  0  0  2  2  0  0 -1  0  0  2 -1  0]
-2018-01-20 17:01:12,168 (eps, min_sample): (1.0924409662, 4)
-2018-01-20 17:01:12,169 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1  1 -1 -1  0  0  0  1  1  0  0 -1  0  0  1 -1  0]
-2018-01-20 17:01:12,169 (eps, min_sample): (1.0924409662, 5)
-2018-01-20 17:01:12,169 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1 -1 -1 -1  0  0  0 -1 -1  0  0 -1  0  0 -1 -1  0]
-2018-01-20 17:01:12,170 (eps, min_sample): (1.0924409662, 9)
-2018-01-20 17:01:12,170 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1 -1 -1 -1  0  0  0 -1 -1  0  0 -1  0  0 -1 -1  0]
-2018-01-20 17:01:12,170 (eps, min_sample): (1.0924409662, 16)
-2018-01-20 17:01:12,171 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,171 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,171 (eps, min_sample): (1.0924409662, 25)
-2018-01-20 17:01:12,171 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,171 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,171 (eps, min_sample): (1.0924409662, 36)
-2018-01-20 17:01:12,172 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,172 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,172 (eps, min_sample): (1.27451446056, 3)
-2018-01-20 17:01:12,172 	Labels: [ 0 -1  1  0 -1  1  1 -1  2 -1  0  0  0  0  2  2  0  0 -1  0  0  2  0  0]
-2018-01-20 17:01:12,173 (eps, min_sample): (1.27451446056, 4)
-2018-01-20 17:01:12,173 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1  1 -1 -1  0  0  0  1  1  0  0 -1  0  0  1  0  0]
-2018-01-20 17:01:12,173 (eps, min_sample): (1.27451446056, 5)
-2018-01-20 17:01:12,174 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1 -1 -1 -1  0  0  0 -1 -1  0  0 -1  0  0 -1  0  0]
-2018-01-20 17:01:12,174 (eps, min_sample): (1.27451446056, 9)
-2018-01-20 17:01:12,174 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1 -1 -1 -1  0  0  0 -1 -1  0  0 -1  0  0 -1  0  0]
-2018-01-20 17:01:12,175 (eps, min_sample): (1.27451446056, 16)
-2018-01-20 17:01:12,175 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,175 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,175 (eps, min_sample): (1.27451446056, 25)
-2018-01-20 17:01:12,176 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,176 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,176 (eps, min_sample): (1.27451446056, 36)
-2018-01-20 17:01:12,176 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,176 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,176 (eps, min_sample): (1.45658795493, 3)
-2018-01-20 17:01:12,177 	Labels: [ 0 -1  1  0 -1  1  1 -1  2  2  0  0  0  0  2  2  0  0 -1  0  0  2  0  0]
-2018-01-20 17:01:12,177 (eps, min_sample): (1.45658795493, 4)
-2018-01-20 17:01:12,178 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1  1  1  0  0  0  0  1  1  0  0 -1  0  0  1  0  0]
-2018-01-20 17:01:12,178 (eps, min_sample): (1.45658795493, 5)
-2018-01-20 17:01:12,178 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1  1  1 -1  0  0  0  1  1  0  0 -1  0  0  1  0  0]
-2018-01-20 17:01:12,179 (eps, min_sample): (1.45658795493, 9)
-2018-01-20 17:01:12,179 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1 -1 -1 -1  0  0  0 -1 -1  0  0 -1  0  0 -1  0  0]
-2018-01-20 17:01:12,179 (eps, min_sample): (1.45658795493, 16)
-2018-01-20 17:01:12,180 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,180 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,180 (eps, min_sample): (1.45658795493, 25)
-2018-01-20 17:01:12,180 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,180 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,180 (eps, min_sample): (1.45658795493, 36)
-2018-01-20 17:01:12,181 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,181 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,181 (eps, min_sample): (1.6386614493, 3)
-2018-01-20 17:01:12,181 	Labels: [ 0 -1  1  0 -1  1  1 -1  2  2  0  0  0  0  2  2  0  0 -1  0  0  2  0  0]
-2018-01-20 17:01:12,182 (eps, min_sample): (1.6386614493, 4)
-2018-01-20 17:01:12,182 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1  1  1  0  0  0  0  1  1  0  0 -1  0  0  1  0  0]
-2018-01-20 17:01:12,183 (eps, min_sample): (1.6386614493, 5)
-2018-01-20 17:01:12,183 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1  1  1  0  0  0  0  1  1  0  0 -1  0  0  1  0  0]
-2018-01-20 17:01:12,183 (eps, min_sample): (1.6386614493, 9)
-2018-01-20 17:01:12,184 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1 -1 -1  0  0  0  0 -1 -1  0  0 -1  0  0 -1  0  0]
-2018-01-20 17:01:12,184 (eps, min_sample): (1.6386614493, 16)
-2018-01-20 17:01:12,184 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,184 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,185 (eps, min_sample): (1.6386614493, 25)
-2018-01-20 17:01:12,185 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,185 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,185 (eps, min_sample): (1.6386614493, 36)
-2018-01-20 17:01:12,185 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,186 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,186 (eps, min_sample): (3.0, 3)
-2018-01-20 17:01:12,186 	Labels: [ 0 -1  1  0  1  1  1 -1  2  2  0  0  0  0  2  2  0  0  1  0  0  2  0  0]
-2018-01-20 17:01:12,186 (eps, min_sample): (3.0, 4)
-2018-01-20 17:01:12,187 	Labels: [ 0 -1  1  0  1  1  1 -1  2  2  0  0  0  0  2  2  0  0  1  0  0  2  0  0]
-2018-01-20 17:01:12,187 (eps, min_sample): (3.0, 5)
-2018-01-20 17:01:12,188 	Labels: [ 0 -1  1  0  1  1  1 -1  2  2  0  0  0  0  2  2  0  0  1  0  0  2  0  0]
-2018-01-20 17:01:12,188 (eps, min_sample): (3.0, 9)
-2018-01-20 17:01:12,189 	Labels: [ 0 -1 -1  0 -1 -1 -1 -1 -1 -1  0  0  0  0 -1 -1  0  0 -1  0  0 -1  0  0]
-2018-01-20 17:01:12,189 (eps, min_sample): (3.0, 16)
-2018-01-20 17:01:12,189 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,189 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,189 (eps, min_sample): (3.0, 25)
-2018-01-20 17:01:12,190 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,190 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
-2018-01-20 17:01:12,190 (eps, min_sample): (3.0, 36)
-2018-01-20 17:01:12,190 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
-2018-01-20 17:01:12,190 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:50,664 Get start to load data from (/home/alice/Documents/thesis/code/atc/ds/sample_feature.csv, NZCH, WSSS)
+2018-01-20 18:52:50,816 There are 4324 records for pair (source, des): (NZCH, WSSS)
+2018-01-20 18:52:50,818 There are 161 records for flight: SIA298-1485730800-schedule-0001:1
+2018-01-20 18:52:50,820 There are 145 records for flight: SIA298-1485817200-schedule-0001:1
+2018-01-20 18:52:50,821 Failed to interpolate SIA298-1485817200-schedule-0001:1 flight
+2018-01-20 18:52:50,822 There are 216 records for flight: SIA298-1485903600-schedule-0000:1
+2018-01-20 18:52:50,824 There are 214 records for flight: SIA298-1485990000-schedule-0000:1
+2018-01-20 18:52:50,826 There are 181 records for flight: SIA298-1486162800-schedule-0000:1
+2018-01-20 18:52:50,828 There are 158 records for flight: SIA296-1486171200-schedule-0001:1
+2018-01-20 18:52:50,828 Failed to interpolate SIA296-1486171200-schedule-0001:1 flight
+2018-01-20 18:52:50,830 There are 228 records for flight: SIA298-1486249200-schedule-0001:1
+2018-01-20 18:52:50,830 Failed to interpolate SIA298-1486249200-schedule-0001:1 flight
+2018-01-20 18:52:50,832 There are 151 records for flight: SIA298-1486335600-schedule-0000:1
+2018-01-20 18:52:50,832 Failed to interpolate SIA298-1486335600-schedule-0000:1 flight
+2018-01-20 18:52:50,833 There are 182 records for flight: SIA298-1486422000-schedule-0001:1
+2018-01-20 18:52:50,835 There are 178 records for flight: SIA298-1486508400-schedule-0000:1
+2018-01-20 18:52:50,837 There are 197 records for flight: SIA298-1486594800-schedule-0000:1
+2018-01-20 18:52:50,839 There are 197 records for flight: SIA298-1486681200-schedule-0000:1
+2018-01-20 18:52:50,841 There are 140 records for flight: SIA298-1486767600-schedule-0001:1
+2018-01-20 18:52:50,842 There are 119 records for flight: SIA298-1486854000-schedule-0001:1
+2018-01-20 18:52:50,844 There are 177 records for flight: SIA298-1486940400-schedule-0003:1
+2018-01-20 18:52:50,846 There are 153 records for flight: SIA298-1487026800-schedule-0001:1
+2018-01-20 18:52:50,848 There are 136 records for flight: SIA298-1487113200-schedule-0000:1
+2018-01-20 18:52:50,850 There are 109 records for flight: SIA298-1487199600-schedule-0001:1
+2018-01-20 18:52:50,852 There are 182 records for flight: SIA298-1487286000-schedule-0000:0
+2018-01-20 18:52:50,854 There are 111 records for flight: SIA298-1487372400-schedule-0000:1
+2018-01-20 18:52:50,856 There are 147 records for flight: SIA298-1487458800-schedule-0000:1
+2018-01-20 18:52:50,858 There are 133 records for flight: SIA298-1487545200-schedule-0000:1
+2018-01-20 18:52:50,860 There are 146 records for flight: SIA298-1487631600-schedule-0000:1
+2018-01-20 18:52:50,862 There are 117 records for flight: SIA298-1487718000-schedule-0001:1
+2018-01-20 18:52:50,864 There are 122 records for flight: SIA298-1487804400-schedule-0000:0
+2018-01-20 18:52:50,865 There are 122 records for flight: SIA298-1487890800-schedule-0000:1
+2018-01-20 18:52:50,867 There are 107 records for flight: SIA298-1487977200-schedule-0002:1
+2018-01-20 18:52:50,869 There are 95 records for flight: SIA298-1488063600-schedule-0001:1
+2018-01-20 18:52:50,870 There are 4/28 false interpolate flights
+2018-01-20 18:52:50,870 Constructing dissimilarity matrix
+2018-01-20 18:52:51,139 (eps, min_sample): (2, 2)
+2018-01-20 18:52:51,140 	Labels: [1 0 0 1 0 0 0 0 2 2 1 1 1 1 2 2 1 1 0 1 1 2 1 1]
+2018-01-20 18:52:51,140 (eps, min_sample): (2, 3)
+2018-01-20 18:52:51,142 	Labels: [1 0 0 1 0 0 0 0 2 2 1 1 1 1 2 2 1 1 0 1 1 2 1 1]
+2018-01-20 18:52:51,142 (eps, min_sample): (2, 4)
+2018-01-20 18:52:51,143 	Labels: [1 0 0 1 0 0 0 0 2 2 1 1 1 1 2 2 1 1 0 1 1 2 1 1]
+2018-01-20 18:52:51,143 (eps, min_sample): (2, 5)
+2018-01-20 18:52:51,144 	Labels: [1 0 0 1 0 0 0 0 2 2 1 1 1 1 2 2 1 1 0 1 1 2 1 1]
+2018-01-20 18:52:51,144 (eps, min_sample): (2, 9)
+2018-01-20 18:52:51,145 	Labels: [ 1  0  0  1  0  0  0  0  2 -1  1  1  1  1  2  2  1  1 -1  1  1  2  1  1]
+2018-01-20 18:52:51,146 (eps, min_sample): (2, 16)
+2018-01-20 18:52:51,147 	Labels: [ 0 -1  1  0  1 -1  1  1  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0]
+2018-01-20 18:52:51,147 (eps, min_sample): (2, 25)
+2018-01-20 18:52:51,148 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,148 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,148 (eps, min_sample): (2, 36)
+2018-01-20 18:52:51,149 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,149 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,149 (eps, min_sample): (3, 2)
+2018-01-20 18:52:51,150 	Labels: [1 0 0 1 0 0 0 0 2 2 1 1 1 1 2 2 1 1 0 1 1 2 1 1]
+2018-01-20 18:52:51,150 (eps, min_sample): (3, 3)
+2018-01-20 18:52:51,151 	Labels: [1 0 0 1 0 0 0 0 2 2 1 1 1 1 2 2 1 1 0 1 1 2 1 1]
+2018-01-20 18:52:51,152 (eps, min_sample): (3, 4)
+2018-01-20 18:52:51,153 	Labels: [1 0 0 1 0 0 0 0 2 2 1 1 1 1 2 2 1 1 0 1 1 2 1 1]
+2018-01-20 18:52:51,153 (eps, min_sample): (3, 5)
+2018-01-20 18:52:51,154 	Labels: [1 0 0 1 0 0 0 0 2 2 1 1 1 1 2 2 1 1 0 1 1 2 1 1]
+2018-01-20 18:52:51,154 (eps, min_sample): (3, 9)
+2018-01-20 18:52:51,155 	Labels: [ 1  0  0  1  0  0  0  0  2 -1  1  1  1  1  2  2  1  1 -1  1  1  2  1  1]
+2018-01-20 18:52:51,156 (eps, min_sample): (3, 16)
+2018-01-20 18:52:51,157 	Labels: [ 0 -1  1  0  1 -1  1  1  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0]
+2018-01-20 18:52:51,157 (eps, min_sample): (3, 25)
+2018-01-20 18:52:51,158 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,158 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,158 (eps, min_sample): (3, 36)
+2018-01-20 18:52:51,159 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,159 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,159 (eps, min_sample): (4, 2)
+2018-01-20 18:52:51,160 	Labels: [1 0 0 1 0 0 0 0 2 2 1 1 1 1 2 2 1 1 0 1 1 2 1 1]
+2018-01-20 18:52:51,160 (eps, min_sample): (4, 3)
+2018-01-20 18:52:51,161 	Labels: [1 0 0 1 0 0 0 0 2 2 1 1 1 1 2 2 1 1 0 1 1 2 1 1]
+2018-01-20 18:52:51,162 (eps, min_sample): (4, 4)
+2018-01-20 18:52:51,163 	Labels: [1 0 0 1 0 0 0 0 2 2 1 1 1 1 2 2 1 1 0 1 1 2 1 1]
+2018-01-20 18:52:51,163 (eps, min_sample): (4, 5)
+2018-01-20 18:52:51,164 	Labels: [1 0 0 1 0 0 0 0 2 2 1 1 1 1 2 2 1 1 0 1 1 2 1 1]
+2018-01-20 18:52:51,164 (eps, min_sample): (4, 9)
+2018-01-20 18:52:51,165 	Labels: [ 1  0  0  1  0  0  0  0  2 -1  1  1  1  1  2  2  1  1 -1  1  1  2  1  1]
+2018-01-20 18:52:51,166 (eps, min_sample): (4, 16)
+2018-01-20 18:52:51,166 	Labels: [ 0 -1  1  0  1 -1  1  1  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0]
+2018-01-20 18:52:51,167 (eps, min_sample): (4, 25)
+2018-01-20 18:52:51,168 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,168 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,168 (eps, min_sample): (4, 36)
+2018-01-20 18:52:51,169 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,169 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,169 (eps, min_sample): (5, 2)
+2018-01-20 18:52:51,170 	Labels: [1 0 0 1 0 0 0 0 2 2 1 1 1 1 2 2 1 1 0 1 1 2 1 1]
+2018-01-20 18:52:51,170 (eps, min_sample): (5, 3)
+2018-01-20 18:52:51,171 	Labels: [1 0 0 1 0 0 0 0 2 2 1 1 1 1 2 2 1 1 0 1 1 2 1 1]
+2018-01-20 18:52:51,171 (eps, min_sample): (5, 4)
+2018-01-20 18:52:51,172 	Labels: [1 0 0 1 0 0 0 0 2 2 1 1 1 1 2 2 1 1 0 1 1 2 1 1]
+2018-01-20 18:52:51,173 (eps, min_sample): (5, 5)
+2018-01-20 18:52:51,174 	Labels: [1 0 0 1 0 0 0 0 2 2 1 1 1 1 2 2 1 1 0 1 1 2 1 1]
+2018-01-20 18:52:51,174 (eps, min_sample): (5, 9)
+2018-01-20 18:52:51,175 	Labels: [ 0  1  1  0  1  1  1  1  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0]
+2018-01-20 18:52:51,175 (eps, min_sample): (5, 16)
+2018-01-20 18:52:51,176 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,176 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,176 (eps, min_sample): (5, 25)
+2018-01-20 18:52:51,177 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,177 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,177 (eps, min_sample): (5, 36)
+2018-01-20 18:52:51,178 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,178 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,178 (eps, min_sample): (6, 2)
+2018-01-20 18:52:51,179 	Labels: [0 1 1 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0]
+2018-01-20 18:52:51,180 (eps, min_sample): (6, 3)
+2018-01-20 18:52:51,180 	Labels: [0 1 1 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0]
+2018-01-20 18:52:51,181 (eps, min_sample): (6, 4)
+2018-01-20 18:52:51,182 	Labels: [0 1 1 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0]
+2018-01-20 18:52:51,182 (eps, min_sample): (6, 5)
+2018-01-20 18:52:51,183 	Labels: [0 1 1 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0]
+2018-01-20 18:52:51,183 (eps, min_sample): (6, 9)
+2018-01-20 18:52:51,184 	Labels: [ 0  1  1  0  1  1  1  1  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0]
+2018-01-20 18:52:51,184 (eps, min_sample): (6, 16)
+2018-01-20 18:52:51,185 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,185 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,185 (eps, min_sample): (6, 25)
+2018-01-20 18:52:51,186 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,186 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,186 (eps, min_sample): (6, 36)
+2018-01-20 18:52:51,187 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,187 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,187 (eps, min_sample): (7, 2)
+2018-01-20 18:52:51,188 	Labels: [0 1 1 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0]
+2018-01-20 18:52:51,189 (eps, min_sample): (7, 3)
+2018-01-20 18:52:51,190 	Labels: [0 1 1 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0]
+2018-01-20 18:52:51,190 (eps, min_sample): (7, 4)
+2018-01-20 18:52:51,191 	Labels: [0 1 1 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0]
+2018-01-20 18:52:51,191 (eps, min_sample): (7, 5)
+2018-01-20 18:52:51,192 	Labels: [0 1 1 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0]
+2018-01-20 18:52:51,192 (eps, min_sample): (7, 9)
+2018-01-20 18:52:51,193 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,193 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,193 (eps, min_sample): (7, 16)
+2018-01-20 18:52:51,194 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,194 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,194 (eps, min_sample): (7, 25)
+2018-01-20 18:52:51,195 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,195 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,195 (eps, min_sample): (7, 36)
+2018-01-20 18:52:51,196 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,196 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,196 (eps, min_sample): (8, 2)
+2018-01-20 18:52:51,197 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,197 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,197 (eps, min_sample): (8, 3)
+2018-01-20 18:52:51,198 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,198 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,198 (eps, min_sample): (8, 4)
+2018-01-20 18:52:51,199 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,199 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,200 (eps, min_sample): (8, 5)
+2018-01-20 18:52:51,200 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,200 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,201 (eps, min_sample): (8, 9)
+2018-01-20 18:52:51,201 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,202 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,202 (eps, min_sample): (8, 16)
+2018-01-20 18:52:51,202 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,203 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,203 (eps, min_sample): (8, 25)
+2018-01-20 18:52:51,203 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,204 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,204 (eps, min_sample): (8, 36)
+2018-01-20 18:52:51,204 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,205 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,205 (eps, min_sample): (9, 2)
+2018-01-20 18:52:51,205 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,206 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,206 (eps, min_sample): (9, 3)
+2018-01-20 18:52:51,207 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,207 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,207 (eps, min_sample): (9, 4)
+2018-01-20 18:52:51,208 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,208 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,208 (eps, min_sample): (9, 5)
+2018-01-20 18:52:51,209 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,209 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,209 (eps, min_sample): (9, 9)
+2018-01-20 18:52:51,210 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,210 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,210 (eps, min_sample): (9, 16)
+2018-01-20 18:52:51,211 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,211 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,211 (eps, min_sample): (9, 25)
+2018-01-20 18:52:51,212 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,212 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2018-01-20 18:52:51,212 (eps, min_sample): (9, 36)
+2018-01-20 18:52:51,213 	Labels: [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1]
+2018-01-20 18:52:51,213 Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)

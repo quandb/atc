@@ -8,7 +8,9 @@ import matplotlib.pyplot as plt
 from scipy.spatial.distance import directed_hausdorff
 from sklearn import preprocessing
 from sklearn.cluster.dbscan_ import DBSCAN
+from sklearn.externals.joblib import Memory
 from sklearn.metrics import silhouette_score, silhouette_samples
+import hdbscan
 
 from atc.frechet import frechetDist
 
@@ -45,8 +47,8 @@ class AutomatedTrajectoryClustering(object):
           v=list(zip(to_['inter_lon'], to_['inter_lat'])))
 
   def compute_the_distance(self, u, v):
-    return frechetDist(u, v)
-    # return max(directed_hausdorff(u, v)[0], directed_hausdorff(v, u)[0])
+    # return frechetDist(u, v)
+    return max(directed_hausdorff(u, v)[0], directed_hausdorff(v, u)[0])
 
   def run(self, source_airport, des_airport, num_points, is_plot):
     num_false_interpolate = 0
@@ -99,10 +101,12 @@ class AutomatedTrajectoryClustering(object):
     self.construct_dissimilarity_matrix()
 
     ''' Perform the clustering with auto tuning parameters '''
+    # self.labels = self.route_clustering({})
     self.auto_tuning(
-      eps_list=np.append(
-        self.sampling(self.dissimilarity_matrix[0], 50)[1:10], [3]),
-      min_sample_list=[3, 4, 5, 9, 16, 25, 36],
+      eps_list=[2,3,4,5,6,7,8,9],
+      # eps_list=np.append(
+      #   self.sampling(self.dissimilarity_matrix[0], 50)[1:10], [3]),
+      min_sample_list=[2, 3, 4, 5, 9, 16, 25, 36],
       soure=source_airport, des=des_airport)
 
     ''' Clusters viz '''
@@ -110,7 +114,13 @@ class AutomatedTrajectoryClustering(object):
       source_airport, des_airport))
 
   def route_clustering(self, params: dict) -> list:
-    clf = DBSCAN(**params)
+    # clf = DBSCAN(**params)
+    clf = hdbscan.HDBSCAN(
+      algorithm='best', alpha=1.0, approx_min_span_tree=True,
+      gen_min_span_tree=False, leaf_size=40, memory=Memory(cachedir=None),
+      metric=params['metric'], min_cluster_size=params['eps'],
+      min_samples=params['min_samples'],
+      p=None)
     return clf.fit_predict(self.dissimilarity_matrix)
 
   def auto_tuning(self, eps_list, min_sample_list, soure, des):
@@ -124,7 +134,7 @@ class AutomatedTrajectoryClustering(object):
                   'min_samples': min_sample,
                   'metric': 'precomputed'}
         labels = self.route_clustering(params)
-        params['#clusters'] = np.unique(labels)
+        params['#clusters'] = len(np.unique(labels))
         logging.debug("\tLabels: %s" % labels)
         try:
           params['silhouette_score'] = silhouette_score(
