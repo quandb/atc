@@ -1,9 +1,13 @@
 import logging
+from itertools import cycle
+
 import pandas as pd
-from scipy import signal
 from scipy import interpolate
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.spatial.distance import directed_hausdorff
+from sklearn import preprocessing
+from sklearn.cluster.dbscan_ import DBSCAN
 
 
 class AutomatedTrajectoryClustering(object):
@@ -16,12 +20,33 @@ class AutomatedTrajectoryClustering(object):
     self.lon_column = lon_col
     self.time_column = time_col
     self.flight_column = flight_col
+    self.__process_data = {}
 
-  def run(self, source_airport, des_airport, num_points):
+  def construct_dissimilarity_matrix(self):
+    self.le_flight_id = preprocessing.LabelEncoder()
+    self.le_flight_id.fit(self.__process_data.keys())
+    num_flights = len(self.__process_data)
+    self.dissimilarity_matrix = np.ndarray(
+      shape=(num_flights,num_flights),
+      dtype=float)
+    for i in xrange(num_flights):
+      for j in xrange(num_flights):
+        from_ = self.__process_data[self.le_flight_id.inverse_transform(i)]
+        to_ = self.__process_data[self.le_flight_id.inverse_transform(j)]
+        # print "Flight ID: ", self.le_flight_id.inverse_transform(i)
+        # print from_['inter_lat']
+        self.dissimilarity_matrix[i, j] = self.compute_the_distance(
+          u=zip(from_['inter_lon'], from_['inter_lat']),
+          v=zip(to_['inter_lon'], to_['inter_lat']))
+
+  def compute_the_distance(self, u, v):
+    return directed_hausdorff(u, v)[0]
+
+  def run(self, source_airport, des_airport, num_points, is_plot):
+    num_false_interpolate = 0
     flight_df = self.load_data(source_airport, des_airport)
     logging.info("There are %s records for pair (source, des): (%s, %s)" % (
       len(flight_df), source_airport, des_airport))
-    process_data = {}
 
     flight_ids = flight_df[self.flight_column].unique()
     for flight_iden in flight_ids:
@@ -43,20 +68,54 @@ class AutomatedTrajectoryClustering(object):
       temp_dict['lon'] = same_flight[self.lon_column]
       temp_dict['inter_lat'] = interpolate_coor['lat']
       temp_dict['inter_lon'] = interpolate_coor['lon']
-      process_data[flight_iden] = temp_dict
+      if sum(np.isnan(interpolate_coor['lat'])) == 0:
+        self.__process_data[flight_iden] = temp_dict
+      else:
+        num_false_interpolate += 1
 
+    logging.info(
+      "There are %s false interpolate flights" % num_false_interpolate)
     ''' Visualize the coordinates '''
-    self.coordinate_viz(
-      lats=(v['lat'] for v in process_data.values()),
-      lons=(v['lon'] for v in process_data.values()),
-      title="Original Coordinate")
-    self.coordinate_viz(
-      lats=(v['inter_lat'] for v in process_data.values()),
-      lons=(v['inter_lon'] for v in process_data.values()),
-      title="Interpolated Coordinate")
+    if is_plot:
+      self.coordinate_viz(
+        lats=(v['lat'] for v in self.__process_data.values()),
+        lons=(v['lon'] for v in self.__process_data.values()),
+        title="Original Coordinate")
+      self.coordinate_viz(
+        lats=(v['inter_lat'] for v in self.__process_data.values()),
+        lons=(v['inter_lon'] for v in self.__process_data.values()),
+        title="Interpolated Coordinate")
 
-    print(adjust_time)
-    print(time_sample)
+    ''' Build the Dissimilarity Matrix '''
+    self.construct_dissimilarity_matrix()
+
+    ''' Perform the clustering '''
+    self.route_clustering()
+
+    ''' Clusters viz '''
+    self.cluster_viz(title="Route Clustering")
+
+  def route_clustering(self):
+    clf = DBSCAN(eps=5, min_samples=3)
+    self.labels = clf.fit_predict(self.dissimilarity_matrix)
+    print("LABELS for %s routes" % len(self.dissimilarity_matrix))
+
+  def cluster_viz(self, title='', pic=''):
+    plt.style.use('ggplot')
+    colorset = cycle(['purple', 'green', 'red', 'blue', 'orange'])
+    for cluster_num in np.unique(self.labels):
+      clr, mar = (colorset.next(), 'o') if cluster_num != -1 else ('black', '.')
+      for i_flight, run_cluster_number in enumerate(self.labels):
+        if run_cluster_number == cluster_num:
+          flight_data = self.__process_data[
+            self.le_flight_id.inverse_transform(i_flight)]
+          plt.scatter(
+            flight_data['inter_lon'], flight_data['inter_lat'],
+            color=clr, marker=mar, alpha=1.0)
+    plt.xlabel("Longitude")
+    plt.ylabel("Latitude")
+    plt.title(title)
+    plt.show()
 
   def coordinate_viz(self, lats, lons, title='', pic_name=''):
     plt.style.use('ggplot')

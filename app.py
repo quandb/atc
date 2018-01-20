@@ -59,7 +59,11 @@ num_points_flag = flags.create(
   flags.FlagType.INT,
   "Number of points in the curve",
   default=50)
-
+is_plot_flag = flags.create(
+  'is_plot',
+  flags.FlagType.BOOLEAN,
+  "Plotting the routes",
+  default=False)
 
 def run():
   atc_handler = AutomatedTrajectoryClustering(
@@ -74,7 +78,8 @@ def run():
   atc_handler.run(
     source_airport=source_airport_flag.value(),
     des_airport=des_airport_flag.value(),
-    num_points=num_points_flag.value())
+    num_points=num_points_flag.value(),
+    is_plot=is_plot_flag.value())
 
 
 if __name__ == '__main__':

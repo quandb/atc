@@ -2,5 +2,5 @@
 --logging_file=/home/jen/Documents/fly/code/atc/ds/test.log
 --source_airport=NZCH
 --des_airport=WSSS
---num_points=1000
+--num_points=100
 
