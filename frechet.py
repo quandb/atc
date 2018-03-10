@@ -1,11 +1,13 @@
 import math
 import numpy as np
 
-def euc_dist(pt1,pt2):
-    return math.sqrt((pt2[0]-pt1[0])*(pt2[0]-pt1[0])+(pt2[1]-pt1[1])*(pt2[1]-pt1[1]))
+
+def euc_dist(pt1, pt2):
+    return math.sqrt(
+        (pt2[0]-pt1[0])*(pt2[0]-pt1[0])+(pt2[1]-pt1[1])*(pt2[1]-pt1[1]))
 
 
-def _c(ca,i,j,P,Q):
+def _c(ca, i, j, P, Q):
     if ca[i,j] > -1:
         return ca[i,j]
     elif i == 0 and j == 0:
@@ -21,7 +23,7 @@ def _c(ca,i,j,P,Q):
     return ca[i,j]
 
 
-def frechetDist(P,Q):
+def frechetDist(P, Q):
     """
     Computes the discrete frechet distance between two polygonal lines
     Algorithm: http://www.kr.tuwien.ac.at/staff/eiter/et-archive/cdtr9464.pdf

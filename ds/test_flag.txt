@@ -1,20 +1,20 @@
---flights_data=/home/jen/Documents/fly/code/atc/ds/sample_feature.csv
---logging_file=/home/jen/Documents/fly/code/atc/ds/test.log
+--flights_data=/home/alice/Documents/thesis/code/atc/ds/sample_feature.csv
+--logging_file=/home/alice/Documents/thesis/code/atc/ds/test.log
 
 # Run for testing
-# --source_airport=NZCH
-# --des_airport=WSSS
+--source_airport=NZCH
+--des_airport=WSSS
 
 # # Run for all
---source_airport=NZCH,NZAA,OMAA,OMAA,OMAA,OMAA,OMDB,OMDB
---des_airport=WSSS,WSSS,RPLL,VTBS,WIII,WMKK,RPLL,VTBS
+# --source_airport=NZCH,NZAA,OMAA,OMAA,OMAA,OMAA,OMDB,OMDB
+# --des_airport=WSSS,WSSS,RPLL,VTBS,WIII,WMKK,RPLL,VTBS
 
 # Outside terminal
 # --source_airport=OMAA
 # --des_airport=VTBS
 
 --num_points=50
---storage_path=/home/jen/Documents/fly/code/atc/ds/result
+--storage_path=/home/alice/Documents/thesis/code/atc/ds/result/
 --is_plot=True
 # index mapping (0, 1, 2) -> (silhouette, db, silhouette + db)
 --index=0 

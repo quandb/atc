@@ -13,11 +13,13 @@ from sklearn.cluster.dbscan_ import DBSCAN
 from sklearn.externals.joblib import Memory
 from sklearn.metrics import silhouette_score, silhouette_samples
 # import hdbscan
-
+from atc.dbcv import DBCV
 from atc.frechet import frechetDist
 from atc import davies_bouldin_index, davies_bouldin_score
 from sklearn.metrics.cluster.unsupervised import calinski_harabaz_score
 from sklearn.metrics.pairwise import euclidean_distances
+
+from atc.utils.progress_bar_utils import print_progress_bar
 
 
 class ValidityIndex(Enum):
@@ -62,8 +64,8 @@ class AutomatedTrajectoryClustering(object):
         self.dissimilarity_matrix[j, i] = distance
 
   def compute_the_distance(self, u, v):
-    return frechetDist(u, v)
-    # return max(directed_hausdorff(u, v)[0], directed_hausdorff(v, u)[0])
+    # return frechetDist(u, v)
+    return max(directed_hausdorff(u, v)[0], directed_hausdorff(v, u)[0])
 
   def analize_distance_between_terminals(self, flight_data):
     unique_flight_ids = flight_data[self.flight_column].unique()
@@ -102,7 +104,7 @@ class AutomatedTrajectoryClustering(object):
     Detect flights that depart and land out of terminal
     Args:
       flight_data (pd DataFrame): flight data from source to des
-      keep (str): keep must be either 'first' or 'last'
+      is_viz (boolean):
 
     Returns:
       pd DataFrame: filtered flight data
@@ -262,8 +264,10 @@ class AutomatedTrajectoryClustering(object):
       len(abnormal_flights), len(flight_ids)))
     normal_flights = set(flight_ids) - abnormal_flights
     for flight_iden in normal_flights:
+      # same_flight = flight_df.query("%s == '%s'" % (
+      #   self.flight_column, flight_iden))[::-1]
       same_flight = flight_df.query("%s == '%s'" % (
-        self.flight_column, flight_iden))[::-1]
+        self.flight_column, flight_iden))
       logging.info("There are %s records for flight: %s" % (
         len(same_flight), flight_iden))
       adjust_time = same_flight[self.time_column]
@@ -278,15 +282,26 @@ class AutomatedTrajectoryClustering(object):
       temp_dict = {}
       temp_dict['lat'] = same_flight[self.lat_column]
       temp_dict['lon'] = same_flight[self.lon_column]
-      temp_dict['inter_lat'] = interpolate_coor['lat']
-      temp_dict['inter_lon'] = interpolate_coor['lon']
-      # temp_dict['inter_lat'] = temp_dict['lat']
-      # temp_dict['inter_lon'] = temp_dict['lon']
-      if sum(np.isnan(interpolate_coor['lat'])) == 0:
-        self.__process_data[flight_iden] = temp_dict
-      else:
-        num_false_interpolate += 1
-        logging.info("Failed to interpolate %s flight" % flight_iden)
+      ''' Take interpolate trajectories '''
+      # temp_dict['inter_lat'] = interpolate_coor['lat']
+      # temp_dict['inter_lon'] = interpolate_coor['lon']
+      # if sum(np.isnan(interpolate_coor['lat'])) == 0:
+      #   self.__process_data[flight_iden] = temp_dict
+      # else:
+      #   num_false_interpolate += 1
+      #   logging.info("Failed to interpolate %s flight" % flight_iden)
+
+      ''' Take original trajectories '''
+      temp_dict['inter_lat'] = temp_dict['lat']
+      temp_dict['inter_lon'] = temp_dict['lon']
+
+      ''' Take sample '''
+      # sample_traj = same_flight.sample(num_points-2).sort_index()
+      # temp_dict['inter_lat'] = [temp_dict['lat'].iloc[0]] + sample_traj[self.lat_column].tolist() + [temp_dict['lat'].iloc[-1]]
+      # temp_dict['inter_lon'] = [temp_dict['lon'].iloc[0]] + sample_traj[self.lon_column].tolist() + [temp_dict['lon'].iloc[-1]]
+      self.__process_data[flight_iden] = temp_dict
+      # print("Origin\n", temp_dict['lat'])
+      # print("Sample\n", temp_dict['inter_lat'])
 
     logging.info(
       "There are %s/%s false interpolate flights" % (
@@ -307,7 +322,7 @@ class AutomatedTrajectoryClustering(object):
           self.storage_path, source_airport, des_airport),
         # is_colornized=True
         )
-
+    
     ''' Build the Dissimilarity Matrix '''
     logging.info("Constructing dissimilarity matrix")
     self.construct_dissimilarity_matrix()
@@ -316,27 +331,64 @@ class AutomatedTrajectoryClustering(object):
     # self.labels = self.route_clustering({})
     logging.info("Tuning parameter")
     # logging.info("Distance: %s" % self.dissimilarity_matrix[0])
-    best_score = self.auto_tuning(
-      eps_list=self.sampling(self.dissimilarity_matrix[0], 100)[1:],
-      min_sample_list=np.arange(start=2, stop=int(len(flight_ids)/2), step=2),
-      # eps_list=[1, 3],
+    sil_score, sil_db_score, three_indices_score = self.auto_tuning(
+      eps_list=self.sampling(self.dissimilarity_matrix[0], 1000)[1:],
+      min_sample_list=np.arange(start=5, stop=int(len(flight_ids)/2), step=2),
+      # eps_list=[0.5, 1, 3],
       # min_sample_list=[3, 5],
       soure=source_airport, des=des_airport)
-    logging.info("Best score is %s" % best_score)
+
+    logging.info("Start to visualize clusters")
     ''' Clusters viz '''
     self.cluster_viz(
-      labels=self.labels,
-      title="Route Clustering for OD pair (%s-%s)" % (
+      labels=self.sil_labels,
+      title="Route Clustering for OD pair (%s-%s) based on Silhouette" % (
         source_airport, des_airport),
       pic="%s/%s_%s_%s.png" % (
-        self.storage_path,source_airport, des_airport, best_score
+        self.storage_path, source_airport, des_airport,
+        'silhouette_%s' % sil_score
       ))
+    self.cluster_viz(
+      labels=self.sil_db_labels,
+      title="Route Clustering for OD pair (%s-%s) based on Silhouette and Davies-Bouldin" % (
+        source_airport, des_airport),
+      pic="%s/%s_%s_%s.png" % (
+        self.storage_path, source_airport, des_airport,
+        'silhouette_db_%s' % sil_db_score
+      ))
+    self.cluster_viz(
+      labels=self.sil_labels,
+      title="Route Clustering for OD pair (%s-%s) based on Three indices" % (
+        source_airport, des_airport),
+      pic="%s/%s_%s_%s.png" % (
+        self.storage_path, source_airport, des_airport,
+        'three_indices_%s' % three_indices_score
+      ))
+
+    ''' Aggregate the clusters '''
     self.agg_cluster_viz(
-      labels=self.labels,
-      title="Clusters' Aggregation for OD pair (%s-%s)" % (
+      labels=self.sil_labels,
+      title="Clusters' Aggregation for OD pair (%s-%s) based on Silhouette" % (
         source_airport, des_airport),
       pic="%s/%s_%s_%s_agg.png" % (
-        self.storage_path,source_airport, des_airport, best_score
+        self.storage_path, source_airport, des_airport,
+        'silhouette_%s' % sil_score
+      ))
+    self.agg_cluster_viz(
+      labels=self.sil_db_labels,
+      title="Clusters' Aggregation for OD pair (%s-%s) based on Silhouette and Davies-Bouldin" % (
+        source_airport, des_airport),
+      pic="%s/%s_%s_%s_agg.png" % (
+        self.storage_path, source_airport, des_airport,
+        'silhouette_db_%s' % sil_db_score
+      ))
+    self.agg_cluster_viz(
+      labels=self.three_indices_labels,
+      title="Clusters' Aggregation for OD pair (%s-%s) based on Three indices" % (
+        source_airport, des_airport),
+      pic="%s/%s_%s_%s_agg.png" % (
+        self.storage_path, source_airport, des_airport,
+        'three_indices_%s' % three_indices_score
       ))
 
   def route_clustering(self, params: dict) -> list:
@@ -354,8 +406,12 @@ class AutomatedTrajectoryClustering(object):
                   tune_plot=True, with_outlier=False):
     tuning_res = []
     tuning_res_append = tuning_res.append
-    best_score = -1
-    for eps in eps_list:
+    best_sil_score = -1
+    best_sil_db_score = -1
+    best_three_indices_score = -1
+    for i, eps in enumerate(eps_list):
+      print_progress_bar(i+1, len(eps_list),
+                         prefix='Tuning progress', suffix="Processing")
       for min_sample in min_sample_list:
         logging.debug("(eps, min_sample): (%s, %s)" % (eps, min_sample))
         params = {'eps': eps,
@@ -372,6 +428,8 @@ class AutomatedTrajectoryClustering(object):
         filter_labels = [i for i in labels if i != -1]
         params['outlier percentage'] = (
             len(labels) - len(filter_labels))*100./len(labels)
+
+        ''' Silhouette Scoring '''
         try:
           if with_outlier:
             silhouette_scores = silhouette_samples(
@@ -384,34 +442,47 @@ class AutomatedTrajectoryClustering(object):
             params['silhouette_score'] = (silhouette_score(
               filter_dis_matrix, filter_labels, metric='precomputed') + 1)/2.
         except ValueError as ve:
-          logging.error(ve)
+          logging.debug(ve)
           continue
 
+        ''' Davies-Bouldin Scoring '''
         if with_outlier:
           db_scores = davies_bouldin_index(
             self.dissimilarity_matrix, labels)
           start = 1 if -1 in labels else 0
           params['db_score'] = min(1, np.mean(db_scores[start:]))
         else:
-          params['db_score'] = min(1, davies_bouldin_score(filter_dis_matrix, filter_labels,))
+          params['db_score'] = min(
+            1., davies_bouldin_score(filter_dis_matrix, filter_labels))
+
+        ''' DBCV Scoring '''
+        params['dbcv_score'] = (DBCV(filter_dis_matrix, filter_labels) + 1)/2.
+
         params['silhouette_db_score'] = params['silhouette_score'] + (
           1 - params['db_score'])
+        params['three_indices_score'] = params['silhouette_score'] + params['dbcv_score'] + (1 - params['db_score'])
         tuning_res_append(params)
-        use_score = params['silhouette_score']
-        if self.index is ValidityIndex.DAVIES_BOULDIN:
-          use_score = params['db_score']
-        elif self.index is ValidityIndex.SILHOUETTE_AND_DAVIES_BOULDIN:
-          use_score = params['silhouette_db_score']
-        if use_score > best_score:
-          best_score = use_score
-          self.labels = labels
+        # use_score = params['silhouette_score']
+        # if self.index is ValidityIndex.DAVIES_BOULDIN:
+        #   use_score = params['db_score']
+        # elif self.index is ValidityIndex.SILHOUETTE_AND_DAVIES_BOULDIN:
+        #   use_score = params['silhouette_db_score']
+        if params['silhouette_score'] > best_sil_score:
+          best_sil_score = params['silhouette_score']
+          self.sil_labels = labels
+        if params['silhouette_db_score'] > best_sil_db_score:
+          best_sil_db_score = params['silhouette_db_score']
+          self.sil_db_labels = labels
+        if params['three_indices_score'] > best_three_indices_score:
+          best_three_indices_score = params['three_indices_score']
+          self.three_indices_labels = labels
         if tune_plot:
           self.cluster_viz(
             title="Tuning viz for %s clusters with score %s" % (
               len(np.unique(labels)), params['silhouette_score']),
-            pic='%s/%s_%s_%sclusters_%s_tuning.png' % (
+            pic='%s/%s_%s_%s_%sclusters_tuning.png' % (
               self.storage_path, soure, des,
-              len(np.unique(labels)), params['silhouette_score']),
+              params['silhouette_score'], len(np.unique(labels))),
             labels=labels)
 
     ''' Store the tuning result '''
@@ -421,9 +492,9 @@ class AutomatedTrajectoryClustering(object):
         "%s/tuning_result_for_%s_%s_%s.csv" % (
           self.storage_path, soure, des, self.index.name),
         index=False))
-    return best_score
+    return best_sil_score, best_sil_db_score, best_three_indices_score
 
-  def cluster_viz(self, labels, title='', pic=''):
+  def cluster_viz(self, labels, title='', pic='', use_original=True):
     plt.style.use('ggplot')
     colorset = cycle(['purple', 'green', 'red', 'blue', 'orange'])
     for cluster_num in np.unique(labels):
@@ -432,9 +503,14 @@ class AutomatedTrajectoryClustering(object):
         if run_cluster_number == cluster_num:
           flight_data = self.__process_data[
             self.le_flight_id.inverse_transform(i_flight)]
-          plt.scatter(
-            flight_data['inter_lon'], flight_data['inter_lat'],
-            color=clr, marker='o', alpha=al, s=20)
+          if use_original:
+            plt.scatter(
+              flight_data['lon'], flight_data['lat'],
+              color=clr, marker='o', alpha=al, s=20)
+          else:
+            plt.scatter(
+              flight_data['inter_lon'], flight_data['inter_lat'],
+              color=clr, marker='o', alpha=al, s=20)
     plt.xlabel("Longitude")
     plt.ylabel("Latitude")
     plt.title(title)
@@ -444,7 +520,7 @@ class AutomatedTrajectoryClustering(object):
     fig.savefig(pic, dpi=500)
     plt.close()
 
-  def agg_cluster_viz(self, labels, title='', pic=''):
+  def agg_cluster_viz(self, labels, title='', pic='', use_original=True):
     plt.style.use('ggplot')
     colorset = cycle(['purple', 'green', 'red', 'blue', 'orange'])
     for cluster_num in set(labels) - set([-1]):
@@ -455,22 +531,15 @@ class AutomatedTrajectoryClustering(object):
       lats_append = []
       for i in i_flights:
         flight = self.__process_data[self.le_flight_id.inverse_transform(i)]
-        lons_append.append(flight['inter_lon'])
-        lats_append.append(flight['inter_lat'])
-        # print("Inter len:", len(flight['inter_lon']), len(flight['inter_lat']))
+        if use_original:
+          lons_append.append(flight['lon'])
+          lats_append.append(flight['lat'])
+        else:
+          lons_append.append(flight['inter_lon'])
+          lats_append.append(flight['inter_lat'])
       lons_array, lats_array = np.array(lons_append), np.array(lats_append)
-      # lon_mean = [np.mean(lons_array[:, i_col])
-      #             for i_col in range(len(lons_append[0]))]
-      # lat_mean = [np.mean(lats_array[:, i_col])
-      #             for i_col in range(len(lats_append[0]))]
-      # print("Cluster", cluster_num)
-      # print(len(lons_append[0]), len(lats_append[0]))
-      # print(lons_append[0], '\n', lats_append[0])
-      # print(len(lons_array[0]), len(lats_array[0]))
       lon = np.mean(lons_array, axis=0)
       lat = np.mean(lats_array, axis=0)
-      # print(len(lon), lon)
-      # print(len(lat), lat)
       plt.scatter(
         lon, lat,
         color=clr, marker='o', s=20)
@@ -498,6 +567,7 @@ class AutomatedTrajectoryClustering(object):
     fig = plt.gcf()
     fig.set_size_inches((11, 8.5), forward=False)
     fig.savefig(pic_name, dpi=500)
+    # plt.show()
     plt.close()
 
   def interpolate_data(self, lat, lon, time, time_sample, der=0, k=3):
@@ -509,8 +579,9 @@ class AutomatedTrajectoryClustering(object):
     Returns:
 
     """
-    # print("Time Decrease: %s" % time.is_monotonic_decreasing)
-    ''' Apply cubic-spline '''
+    # print("Time Increase: %s" % time.is_monotonic_increasing)
+    # print(time)
+    # ''' Apply cubic-spline '''
     ''' lon = f(time) '''
     lon_tck = interpolate.splrep(time, lon, s=0, k=k)
     ''' lat = f(time) '''
@@ -535,13 +606,13 @@ class AutomatedTrajectoryClustering(object):
     sample_value = np.arange(min(values), max(values), step_size)
     return sample_value[:num_points]
 
-  def load_data(self, source_airport, des_airport):
+  def load_data(self, source_airport, des_airport, deli=','):
     logging.info('Get start to load data from (%s, %s, %s)' % (
       self.filename, source_airport, des_airport))
     # print("CROSS")
     # t_df = pd.read_csv(self.filename, delimiter='\t')
     # print(pd.crosstab(t_df[self.source_column], t_df[self.des_column]))
-    return pd.read_csv(self.filename, delimiter='\t').query(
+    return pd.read_csv(self.filename, delimiter=deli).query(
       "%s == '%s' and %s == '%s'" % (
         self.source_column, source_airport,
         self.des_column, des_airport))

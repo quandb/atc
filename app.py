@@ -1,9 +1,11 @@
 import logging
 
+from sklearn.utils import shuffle
+
 from atc import flags
 from atc.lib import AutomatedTrajectoryClustering
+from atc.utils.progress_bar_utils import print_progress_bar
 
-from progress_bar_utils import print_progress_bar
 
 flights_data_flag = flags.create(
     'flights_data',
@@ -78,8 +80,8 @@ index_flag = flags.create(
 
 
 def run():
-  for i, (source_airport, des_airport) in enumerate(
-        zip(source_airport_flag.value(), des_airport_flag.value())):
+  pairs = list(zip(source_airport_flag.value(), des_airport_flag.value()))
+  for i, (source_airport, des_airport) in enumerate(shuffle(pairs)):
     atc_handler = AutomatedTrajectoryClustering(
       filename=flights_data_flag.value(),
       source_col=source_column_flag.value(),
@@ -90,14 +92,19 @@ def run():
       flight_col=flight_id_column_flag.value(),
       storage_path=storage_path_flag.value(),
       index=index_flag.value())
-    print_progress_bar(i+1, len(source_airport_flag.value()))
+    # print_progress_bar(i+1, len(source_airport_flag.value()))
     logging.info("\n\nProcess pair (%s - %s)" % (source_airport, des_airport))
-    atc_handler.run(
-      source_airport=source_airport,
-      des_airport=des_airport,
-      num_points=num_points_flag.value(),
-      is_plot=is_plot_flag.value())
-    del atc_handler
+    print("\n\nProcess pair (%s - %s)" % (source_airport, des_airport))
+    try:
+      atc_handler.run(
+        source_airport=source_airport,
+        des_airport=des_airport,
+        num_points=num_points_flag.value(),
+        is_plot=is_plot_flag.value())
+    except KeyError as e:
+      logging.error(e)
+    finally:
+      del atc_handler
 
   logging.info("\n\nDONE")
 
