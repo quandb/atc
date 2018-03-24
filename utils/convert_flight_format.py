@@ -49,7 +49,20 @@ if __name__ == '__main__':
                 flight_append(flight_tract)
 
     ''' Transform to dataframe '''
-    pd.DataFrame(flights).to_csv(
+    col_order = [
+        'Flight_ID',
+        'Ident',
+        'Origin',
+        'Destination',
+        'Actual_Arrival_Time_(UTC)',
+        'DRemains',
+        'TRemains',
+        'TTravelled',
+        'Time_(UTC)',
+        'Latitude',
+        'Longitude',
+    ]
+    pd.DataFrame(flights)[col_order].to_csv(
         flights_data_flag.value().replace('.json', '.csv'),
         index=False)
     print("Len:", len(flights))
