@@ -1,4 +1,5 @@
 import logging
+import os
 from enum import Enum
 from itertools import cycle
 
@@ -64,8 +65,8 @@ class AutomatedTrajectoryClustering(object):
         self.dissimilarity_matrix[j, i] = distance
 
   def compute_the_distance(self, u, v):
-    # return frechetDist(u, v)
-    return max(directed_hausdorff(u, v)[0], directed_hausdorff(v, u)[0])
+    return frechetDist(u, v)
+    # return max(directed_hausdorff(u, v)[0], directed_hausdorff(v, u)[0])
 
   def analize_distance_between_terminals(self, flight_data):
     unique_flight_ids = flight_data[self.flight_column].unique()
@@ -235,40 +236,50 @@ class AutomatedTrajectoryClustering(object):
 
     return abnormal_flights
 
-  def run(self, source_airport, des_airport, num_points, is_plot, k=3, der=0):
+  def create_a_home_folder(self, source, des):
+    self.storage_path = "%s/%s_%s" % (self.storage_path, source, des)
+    os.mkdir(self.storage_path)
+
+  def run(self, source_airport, des_airport, num_points, is_plot, k=3, der=0, locker=None):
+    self.prefix = "%s-%s: " % (source_airport, des_airport)
     self.__process_data = {}
     self.labels = []
     num_false_interpolate = 0
-    flight_df = self.load_data(source_airport, des_airport)
+    if locker:
+      with locker:
+        flight_df = self.load_data(source_airport, des_airport)
+    else:
+      flight_df = self.load_data(source_airport, des_airport)
     # self.analize_distance_between_terminals(flight_df)
     # return None
-    logging.info("There are %s records for pair (source, des): (%s, %s)" % (
+    logging.info(self.prefix + self.prefix + "There are %s records for pair (source, des): (%s, %s)" % (
       len(flight_df), source_airport, des_airport))
     flight_ids = flight_df[self.flight_column].unique()
     # coor_abnormal_flights = set(
     #   self.detect_abnormal_flight_by_coor(flight_df, keep='first')).union(
     #     self.detect_abnormal_flight_by_coor(flight_df, keep='last'))
-    # logging.info("There are %s/%s are outliers by coordinate removal." % (
+    # logging.info(self.prefix + self.prefix + "There are %s/%s are outliers by coordinate removal." % (
     #   len(coor_abnormal_flights), len(flight_ids)))
     #
     # abnormal_flights = set(self.detect_abnormal_flight_by_distances(flight_df))
-    # logging.info("There are %s/%s are outliers by distance removal." % (
+    # logging.info(self.prefix + self.prefix + "There are %s/%s are outliers by distance removal." % (
     #   len(abnormal_flights), len(flight_ids)))
-    # logging.info(
+    # logging.info(self.prefix + 
     #   "coor - dis removal: %s", coor_abnormal_flights - abnormal_flights)
-    # logging.info(
+    # logging.info(self.prefix + 
     #   "dis - coor removal: %s", abnormal_flights - coor_abnormal_flights)
 
     abnormal_flights = self.detect_abnormal_flight_clustering(flight_df)
-    logging.info("There are %s/%s are outliers removed by DBSCAN." % (
+    logging.info(self.prefix + "There are %s/%s are outliers removed by DBSCAN." % (
       len(abnormal_flights), len(flight_ids)))
     normal_flights = set(flight_ids) - abnormal_flights
+    self.create_a_home_folder(source_airport, des_airport)
     for flight_iden in normal_flights:
       # same_flight = flight_df.query("%s == '%s'" % (
       #   self.flight_column, flight_iden))[::-1]
       same_flight = flight_df.query("%s == '%s'" % (
         self.flight_column, flight_iden))
-      logging.info("There are %s records for flight: %s" % (
+      logging.info(self.prefix + "There are %s records for flight: %s" % (
         len(same_flight), flight_iden))
       adjust_time = same_flight[self.time_column]
       time_sample = self.sampling(adjust_time, num_points)
@@ -289,21 +300,21 @@ class AutomatedTrajectoryClustering(object):
       #   self.__process_data[flight_iden] = temp_dict
       # else:
       #   num_false_interpolate += 1
-      #   logging.info("Failed to interpolate %s flight" % flight_iden)
+      #   logging.info(self.prefix + "Failed to interpolate %s flight" % flight_iden)
 
       ''' Take original trajectories '''
-      temp_dict['inter_lat'] = temp_dict['lat']
-      temp_dict['inter_lon'] = temp_dict['lon']
+      # temp_dict['inter_lat'] = temp_dict['lat']
+      # temp_dict['inter_lon'] = temp_dict['lon']
 
       ''' Take sample '''
-      # sample_traj = same_flight.sample(num_points-2).sort_index()
-      # temp_dict['inter_lat'] = [temp_dict['lat'].iloc[0]] + sample_traj[self.lat_column].tolist() + [temp_dict['lat'].iloc[-1]]
-      # temp_dict['inter_lon'] = [temp_dict['lon'].iloc[0]] + sample_traj[self.lon_column].tolist() + [temp_dict['lon'].iloc[-1]]
+      sample_traj = same_flight.sample(num_points-2).sort_index()
+      temp_dict['inter_lat'] = [temp_dict['lat'].iloc[0]] + sample_traj[self.lat_column].tolist() + [temp_dict['lat'].iloc[-1]]
+      temp_dict['inter_lon'] = [temp_dict['lon'].iloc[0]] + sample_traj[self.lon_column].tolist() + [temp_dict['lon'].iloc[-1]]
       self.__process_data[flight_iden] = temp_dict
       # print("Origin\n", temp_dict['lat'])
       # print("Sample\n", temp_dict['inter_lat'])
 
-    logging.info(
+    logging.info(self.prefix + 
       "There are %s/%s false interpolate flights" % (
         num_false_interpolate, len(flight_ids)))
     ''' Visualize the coordinates '''
@@ -324,13 +335,13 @@ class AutomatedTrajectoryClustering(object):
         )
     
     ''' Build the Dissimilarity Matrix '''
-    logging.info("Constructing dissimilarity matrix")
+    logging.info(self.prefix + "Constructing dissimilarity matrix")
     self.construct_dissimilarity_matrix()
 
     ''' Perform the clustering with auto tuning parameters '''
     # self.labels = self.route_clustering({})
-    logging.info("Tuning parameter")
-    # logging.info("Distance: %s" % self.dissimilarity_matrix[0])
+    logging.info(self.prefix + "Tuning parameter")
+    # logging.info(self.prefix + "Distance: %s" % self.dissimilarity_matrix[0])
     sil_score, sil_db_score, three_indices_score = self.auto_tuning(
       eps_list=self.sampling(self.dissimilarity_matrix[0], 1000)[1:],
       min_sample_list=np.arange(start=5, stop=int(len(flight_ids)/2), step=2),
@@ -338,7 +349,7 @@ class AutomatedTrajectoryClustering(object):
       # min_sample_list=[3, 5],
       soure=source_airport, des=des_airport)
 
-    logging.info("Start to visualize clusters")
+    logging.info(self.prefix + "Start to visualize clusters")
     ''' Clusters viz '''
     self.cluster_viz(
       labels=self.sil_labels,
@@ -607,7 +618,7 @@ class AutomatedTrajectoryClustering(object):
     return sample_value[:num_points]
 
   def load_data(self, source_airport, des_airport, deli=','):
-    logging.info('Get start to load data from (%s, %s, %s)' % (
+    logging.info(self.prefix + 'Get start to load data from (%s, %s, %s)' % (
       self.filename, source_airport, des_airport))
     # print("CROSS")
     # t_df = pd.read_csv(self.filename, delimiter='\t')

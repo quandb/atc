@@ -1,5 +1,8 @@
 import logging
-
+from functools import partial
+from multiprocessing.pool import Pool
+from multiprocessing import Lock, Manager
+from multiprocessing import cpu_count
 from sklearn.utils import shuffle
 
 from atc import flags
@@ -79,10 +82,37 @@ index_flag = flags.create(
   default=0)
 
 
+def atc_interface(params):
+  source_airport = params.pop('source_airport')
+  des_airport = params.pop('des_airport')
+  locker = params.pop('locker')
+  atc_handler = AutomatedTrajectoryClustering(**params)
+  # print_progress_bar(i+1, len(source_airport_flag.value()))
+  logging.info("\n\nProcess pair (%s - %s)" % (source_airport, des_airport))
+  print("\n\nProcess pair (%s - %s)" % (source_airport, des_airport))
+  try:
+    atc_handler.run(
+      source_airport=source_airport,
+      des_airport=des_airport,
+      num_points=num_points_flag.value(),
+      is_plot=is_plot_flag.value(),
+      locker=locker)
+  except KeyError as e:
+    logging.error(e)
+  finally:
+    del atc_handler
+
+
 def run():
+  input_for_parallel = []
   pairs = list(zip(source_airport_flag.value(), des_airport_flag.value()))
+  m = Manager()
+  lock = m.Lock()
+  func = partial(atc_interface)
   for i, (source_airport, des_airport) in enumerate(shuffle(pairs)):
-    atc_handler = AutomatedTrajectoryClustering(
+    input_for_parallel.append(dict(
+      source_airport=source_airport,
+      des_airport=des_airport,
       filename=flights_data_flag.value(),
       source_col=source_column_flag.value(),
       des_col=des_column_flag.value(),
@@ -91,20 +121,13 @@ def run():
       time_col=time_column_flag.value(),
       flight_col=flight_id_column_flag.value(),
       storage_path=storage_path_flag.value(),
-      index=index_flag.value())
-    # print_progress_bar(i+1, len(source_airport_flag.value()))
-    logging.info("\n\nProcess pair (%s - %s)" % (source_airport, des_airport))
-    print("\n\nProcess pair (%s - %s)" % (source_airport, des_airport))
-    try:
-      atc_handler.run(
-        source_airport=source_airport,
-        des_airport=des_airport,
-        num_points=num_points_flag.value(),
-        is_plot=is_plot_flag.value())
-    except KeyError as e:
-      logging.error(e)
-    finally:
-      del atc_handler
+      index=index_flag.value(),
+      locker=lock
+    ))
+  pool = Pool(processes=cpu_count())
+  pool.map(func, input_for_parallel)
+  pool.close()
+  pool.join()
 
   logging.info("\n\nDONE")
 
