@@ -45,6 +45,7 @@ if __name__ == '__main__':
         'Ident',
         'Origin',
         'Destination',
+        'OD_pair',
         'Actual_Arrival_Time_(UTC)',
         'DRemains',
         'TRemains',
@@ -72,6 +73,7 @@ if __name__ == '__main__':
                 flight_tract = deepcopy(flight_header)
                 for track_key in tract_keys:
                     flight_tract[track_key.replace(' ', '_')] = tract[track_key]
+                flight_tract['OD_pair'] = flight_tract['Origin'] + '-' + flight_tract['Destination']
                 writer.writerow(flight_tract)
     fin.close()
 
