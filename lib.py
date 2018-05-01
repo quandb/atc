@@ -234,7 +234,7 @@ class AutomatedTrajectoryClustering(object):
 
     def create_a_home_folder(self, source, des):
         self.storage_path = "%s/%s_%s" % (self.storage_path, source, des)
-        os.mkdir(self.storage_path)
+        os.makedirs(self.storage_path, exist_ok=True)
 
     def run(self, source_airport, des_airport, num_points, is_plot, k=3, der=0, locker=None):
         self.prefix = "%s-%s: " % (source_airport, des_airport)
@@ -312,7 +312,8 @@ class AutomatedTrajectoryClustering(object):
         ''' Perform the clustering with auto tuning parameters '''
         # self.labels = self.route_clustering({})
         logging.info(self.prefix + "Tuning parameter")
-        min_samples = self.initialize_min_sample_for_clustering(len(flight_ids))
+        min_samples = self.initialize_min_sample_for_clustering(
+            source_airport, des_airport, len(flight_ids))
         sil_score, sil_db_score, three_indices_score = self.auto_tuning(
             eps_list=self.sampling(self.dissimilarity_matrix[0], 1000)[1:],
             min_sample_list=min_samples,
@@ -330,10 +331,7 @@ class AutomatedTrajectoryClustering(object):
             sil_score, sil_db_score, three_indices_score)
 
     def initialize_min_sample_for_clustering(
-            self,
-            source_airport,
-            des_airport,
-            num_of_flights,
+            self, source_airport, des_airport, num_of_flights,
             pre_observed=True):
         """
         Initialize min sample value for training clustering model
