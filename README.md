@@ -1,2 +1,2 @@
 # atc
-Automated trajectory clasutering framework
+Automated trajectory clustering framework
