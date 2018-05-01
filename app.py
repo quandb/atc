@@ -96,7 +96,8 @@ def atc_interface(params):
       des_airport=des_airport,
       num_points=num_points_flag.value(),
       is_plot=is_plot_flag.value(),
-      locker=locker)
+      # locker=locker
+      )
   except KeyError as e:
     logging.error(e)
   finally:
