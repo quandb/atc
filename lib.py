@@ -115,6 +115,7 @@ class AutomatedTrajectoryClustering(object):
         terminal_coors = terminal_flights[
             [self.lon_column, self.lat_column]].as_matrix()
         min_sample = int(len(land_flights) / 2)
+        # print(terminal_coors)
         labels = DBSCAN(
             min_samples=min_sample,
             n_jobs=-1).fit_predict(terminal_coors)
@@ -317,7 +318,7 @@ class AutomatedTrajectoryClustering(object):
         sil_score, sil_db_score, three_indices_score = self.auto_tuning(
             eps_list=self.sampling(self.dissimilarity_matrix[0], 1000)[1:],
             min_sample_list=min_samples,
-            soure=source_airport, des=des_airport)
+            source=source_airport, des=des_airport)
 
         logging.info(self.prefix + "Start to visualize clusters")
         ''' Clusters viz '''
@@ -348,7 +349,7 @@ class AutomatedTrajectoryClustering(object):
         """
         if pre_observed:
             if source_airport == "YBBN" and des_airport == "WSSS":
-                return [49]
+                return [30]
             if source_airport == "YSSY" and des_airport == "VTBS":
                 return [3]
             if source_airport == "NZCH" and des_airport == "WSSS":
@@ -479,7 +480,7 @@ class AutomatedTrajectoryClustering(object):
         return clf.fit_predict(self.dissimilarity_matrix)
 
     def auto_tuning(self,
-                    eps_list, min_sample_list, soure, des,
+                    eps_list, min_sample_list, source, des,
                     tune_plot=True, with_outlier=False):
         tuning_res = []
         tuning_res_append = tuning_res.append
@@ -490,21 +491,22 @@ class AutomatedTrajectoryClustering(object):
             print_progress_bar(i + 1, len(eps_list),
                                prefix='Tuning progress', suffix="Processing")
             for min_sample in min_sample_list:
-                logging.debug("(eps, min_sample): (%s, %s)" % (eps, min_sample))
+                logging.debug("\t(eps, min_sample): (%s, %s)" % (eps, min_sample))
                 params = {'eps': eps,
                           'min_samples': min_sample}
                 clustering_params = params.copy()
                 clustering_params['metric'] = 'precomputed'
                 labels = self.route_clustering(clustering_params)
                 unique_clusters = np.unique(labels)
+
                 if len(unique_clusters) is 1:
                     continue
                 params['#clusters'] = len(unique_clusters)
+                logging.info("#clusters detected: %s" % len(unique_clusters))
                 logging.debug("\tLabels: %s" % labels)
                 filter_dis_matrix = self.dissimilarity_matrix[labels != -1][:, labels != -1]
                 filter_labels = [i for i in labels if i != -1]
-                params['outlier percentage'] = (
-                                                       len(labels) - len(filter_labels)) * 100. / len(labels)
+                params['outlier percentage'] = (len(labels) - len(filter_labels)) * 100. / len(labels)
 
                 ''' Silhouette Scoring '''
                 try:
@@ -513,8 +515,7 @@ class AutomatedTrajectoryClustering(object):
                             self.dissimilarity_matrix, labels, metric='precomputed')
                         start = 1 if -1 in labels else 0
                         ''' Scale to range (0, 1) '''
-                        params['silhouette_score'] = (
-                                                             np.mean(silhouette_scores[start:]) + 1) / 2.
+                        params['silhouette_score'] = (np.mean(silhouette_scores[start:]) + 1) / 2.
                     else:
                         params['silhouette_score'] = (silhouette_score(
                             filter_dis_matrix, filter_labels, metric='precomputed') + 1) / 2.
@@ -559,7 +560,7 @@ class AutomatedTrajectoryClustering(object):
                         title="Tuning viz for %s clusters with score %s" % (
                             len(np.unique(labels)), params['silhouette_score']),
                         pic='%s/%s_%s_%s_%sclusters_tuning.png' % (
-                            self.storage_path, soure, des,
+                            self.storage_path, source, des,
                             params['silhouette_score'], len(np.unique(labels))),
                         labels=labels)
 
@@ -568,7 +569,7 @@ class AutomatedTrajectoryClustering(object):
             .sort_values(by=['silhouette_score'], ascending=False)
             .to_csv(
             "%s/tuning_result_for_%s_%s_%s.csv" % (
-                self.storage_path, soure, des, self.index.name),
+                self.storage_path, source, des, self.index.name),
             index=False))
         return best_sil_score, best_sil_db_score, best_three_indices_score
 
@@ -683,12 +684,14 @@ class AutomatedTrajectoryClustering(object):
         return sample_value[:num_points]
 
     def load_data(self, source_airport, des_airport, deli=','):
-        logging.info(self.prefix + 'Get start to load data from (%s, %s, %s)' % (
-            self.filename, source_airport, des_airport))
-        # print("CROSS")
-        # t_df = pd.read_csv(self.filename, delimiter='\t')
-        # print(pd.crosstab(t_df[self.source_column], t_df[self.des_column]))
-        return pd.read_csv(self.filename, delimiter=deli).query(
+        logging.info(
+            self.prefix + 'Get start to load data from (%s, %s, %s)' % (
+                self.filename, source_airport, des_airport))
+        flight_od_df = pd.read_csv(self.filename, delimiter=deli).query(
             "%s == '%s' and %s == '%s'" % (
                 self.source_column, source_airport,
-                self.des_column, des_airport))
+                self.des_column, des_airport)
+        )
+        logging.info(self.prefix + "Load data - #record of (%s, %s): %s" % (
+            source_airport, des_airport, len(flight_od_df)))
+        return flight_od_df.dropna(axis=0, how='any')
