@@ -1,25 +1,24 @@
 import logging
 from functools import partial
-from multiprocessing.pool import Pool
-from multiprocessing import Lock, Manager
+from multiprocessing import Manager
 from multiprocessing import cpu_count
+from multiprocessing.pool import Pool
+
 from sklearn.utils import shuffle
 
 from atc import flags
 from atc.lib import AutomatedTrajectoryClustering
-from atc.utils.progress_bar_utils import print_progress_bar
-
 
 flights_data_flag = flags.create(
-    'flights_data',
-    flags.FlagType.STRING,
-    "Full path to the trajectory file",
-    required=True)
+  'flights_data',
+  flags.FlagType.STRING,
+  "Full path to the trajectory file",
+  required=True)
 logging_file_flag = flags.create(
-    'logging_file',
-    flags.FlagType.STRING,
-    "Full path to the logging file",
-    required=True)
+  'logging_file',
+  flags.FlagType.STRING,
+  "Full path to the logging file",
+  required=True)
 lat_column_flag = flags.create(
   'lat_column',
   flags.FlagType.STRING,
@@ -97,7 +96,7 @@ def atc_interface(params):
       num_points=num_points_flag.value(),
       is_plot=is_plot_flag.value(),
       # locker=locker
-      )
+    )
   except KeyError as e:
     logging.error(e)
   finally:
