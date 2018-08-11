@@ -1,2 +1,9 @@
-# atc
-Automated trajectory clustering framework
+Trajectory Clustering Framework
+
+# INFORMATION
+
+# INSTALLATION
+
+# USAGE
+
+# RESULTS
