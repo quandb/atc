@@ -30,7 +30,7 @@ class ValidityIndex(Enum):
 
 class AutomatedTrajectoryClustering(object):
   def __init__(self, filename, source_col, des_col, lat_col, lon_col, time_col,
-               flight_col, storage_path, index):
+               flight_col, storage_path, index, is_interpolated, is_used_frechet, num_eps_tuning_value):
     self.filename = filename
     self.source_column = source_col
     self.des_column = des_col
@@ -42,18 +42,9 @@ class AutomatedTrajectoryClustering(object):
     self.__process_data = {}
     self.labels = []
     self.index = ValidityIndex(index)
-    self.is_interpolated_flag = flags.create(
-      'is_interpolated',
-      flags.FlagType.BOOLEAN,
-      "Plotting the routes",
-      default=True
-    )
-    self.is_used_frechet_flag = flags.create(
-      'is_used_frechet',
-      flags.FlagType.BOOLEAN,
-      "Use frechet distance",
-      default=True
-    )
+    self.is_interpolated = is_interpolated
+    self.is_used_frechet = is_used_frechet
+    self.num_eps_tuning_value = num_eps_tuning_value
 
   def construct_dissimilarity_matrix(self):
     self.le_flight_id = preprocessing.LabelEncoder()
@@ -76,7 +67,7 @@ class AutomatedTrajectoryClustering(object):
         self.dissimilarity_matrix[j, i] = distance
 
   def compute_the_distance(self, u, v):
-    if self.is_used_frechet_flag.value():
+    if self.is_used_frechet:
       return frechetDist(u, v)
     return max(directed_hausdorff(u, v)[0], directed_hausdorff(v, u)[0])
 
@@ -251,7 +242,7 @@ class AutomatedTrajectoryClustering(object):
     self.create_a_home_folder(source_airport, des_airport)
     start_interpolate = datetime.now()
     for flight_iden in normal_flights:
-      # if self.is_interpolated_flag.value():
+      # if self.is_interpolated:
       #   print("INTERPOLATE")
       #   same_flight = flight_df.query("%s == '%s'" % (
       #     self.flight_column, flight_iden))[::-1]
@@ -268,7 +259,7 @@ class AutomatedTrajectoryClustering(object):
       temp_dict['lat'] = same_flight[self.lat_column]
       temp_dict['lon'] = same_flight[self.lon_column]
 
-      if self.is_interpolated_flag.value():
+      if self.is_interpolated:
         ''' Take interpolate trajectories '''
         adjust_time = same_flight[self.time_column]
         time_sample = self.sampling(adjust_time, num_points)
@@ -321,7 +312,10 @@ class AutomatedTrajectoryClustering(object):
       source_airport, des_airport, len(flight_ids))
     start_tuning = datetime.now()
     sil_score, sil_db_score, three_indices_score = self.auto_tuning(
-      eps_list=self.sampling(self.dissimilarity_matrix[0], 10)[1:],
+      eps_list=self.sampling(
+        self.dissimilarity_matrix[0],
+        self.num_eps_tuning_value,
+      )[1:],
       min_sample_list=min_samples,
       source=source_airport, des=des_airport)
     end_tuning = datetime.now()

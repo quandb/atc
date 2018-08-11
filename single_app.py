@@ -74,10 +74,28 @@ index_flag = flags.create(
     flags.FlagType.INT,
     "Validation index for evaluating clustering result",
     default=0)
+is_interpolated_flag = flags.create(
+    'is_interpolated',
+    flags.FlagType.BOOLEAN,
+    "Plotting the routes",
+    default=True
+)
+is_used_frechet_flag = flags.create(
+    'is_used_frechet',
+    flags.FlagType.BOOLEAN,
+    "Use frechet distance",
+    default=True
+)
+num_eps_tuning_value_flag = flags.create(
+    'num_eps_tuning_value',
+    flags.FlagType.INT,
+    "Number of eps value will be generating and tuning",
+    default=1000
+)
 
 
 def run():
-    pairs = list(zip(source_airport_flag.value(), des_airport_flag.value()))
+    pairs = zip(source_airport_flag.value(), des_airport_flag.value())
     for i, (source_airport, des_airport) in enumerate(pairs):
         params = dict(
             filename=flights_data_flag.value(),
@@ -89,6 +107,9 @@ def run():
             flight_col=flight_id_column_flag.value(),
             storage_path=storage_path_flag.value(),
             index=index_flag.value(),
+            is_interpolated=is_interpolated_flag.value(),
+            is_used_frechet=is_used_frechet_flag.value(),
+            num_eps_tuning_value=num_eps_tuning_value_flag.value(),
         )
         atc_handler = AutomatedTrajectoryClustering(**params)
         # print_progress_bar(i+1, len(source_airport_flag.value()))
