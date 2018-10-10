@@ -15,8 +15,6 @@ from sklearn.metrics import silhouette_score, silhouette_samples
 from sklearn.metrics.pairwise import euclidean_distances
 
 from atc import davies_bouldin_index, davies_bouldin_score
-from atc import flags
-# import hdbscan
 from atc.dbcv import DBCV
 from atc.frechet import frechetDist
 from atc.utils.progress_bar_utils import print_progress_bar
@@ -242,11 +240,6 @@ class AutomatedTrajectoryClustering(object):
     self.create_a_home_folder(source_airport, des_airport)
     start_interpolate = datetime.now()
     for flight_iden in normal_flights:
-      # if self.is_interpolated:
-      #   print("INTERPOLATE")
-      #   same_flight = flight_df.query("%s == '%s'" % (
-      #     self.flight_column, flight_iden))[::-1]
-      # else:
       same_flight = flight_df.query("%s == '%s'" % (
         self.flight_column, flight_iden))
       logging.info(self.prefix + "There are %s records for flight: %s" % (
@@ -278,10 +271,6 @@ class AutomatedTrajectoryClustering(object):
           num_false_interpolate += 1
           logging.info(self.prefix + "Failed to interpolate %s flight" % flight_iden)
       else:
-        ''' Take original trajectories '''
-        # temp_dict['inter_lat'] = temp_dict['lat']
-        # temp_dict['inter_lon'] = temp_dict['lon']
-
         ''' Re-sampling '''
         sample_traj = same_flight.sample(num_points - 2).sort_index()
         temp_dict['inter_lat'] = [temp_dict['lat'].iloc[0]] + sample_traj[self.lat_column].tolist() + [temp_dict['lat'].iloc[-1]]
@@ -484,12 +473,6 @@ class AutomatedTrajectoryClustering(object):
 
   def route_clustering(self, params: dict) -> list:
     clf = DBSCAN(**params, n_jobs=-1)
-    # clf = hdbscan.HDBSCAN(
-    #   algorithm='best', alpha=1.0, approx_min_span_tree=True,
-    #   gen_min_span_tree=False, leaf_size=40, memory=Memory(cachedir=None),
-    #   metric=params['metric'], min_cluster_size=params['eps'],
-    #   min_samples=params['min_samples'],
-    #   p=None)
     return clf.fit_predict(self.dissimilarity_matrix)
 
   def auto_tuning(self,
@@ -554,11 +537,6 @@ class AutomatedTrajectoryClustering(object):
         params['three_indices_score'] = params['silhouette_score'] + params['dbcv_score'] + (
             1 - params['db_score'])
         tuning_res_append(params)
-        # use_score = params['silhouette_score']
-        # if self.index is ValidityIndex.DAVIES_BOULDIN:
-        #   use_score = params['db_score']
-        # elif self.index is ValidityIndex.SILHOUETTE_AND_DAVIES_BOULDIN:
-        #   use_score = params['silhouette_db_score']
         if params['silhouette_score'] > best_sil_score:
           best_sil_score = params['silhouette_score']
           self.sil_labels = labels

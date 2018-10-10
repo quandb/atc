@@ -1,5 +1,5 @@
-import os
 import logging
+import os
 
 from atc import flags
 from atc.lib import AutomatedTrajectoryClustering
