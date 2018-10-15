@@ -301,10 +301,14 @@ class AutomatedTrajectoryClustering(object):
       source_airport, des_airport, len(flight_ids))
     start_tuning = datetime.now()
     sil_score, sil_db_score, three_indices_score = self.auto_tuning(
-      eps_list=self.sampling(
-        self.dissimilarity_matrix[0],
-        self.num_eps_tuning_value,
-      )[1:],
+      # eps_list=self.sampling(
+      #   self.dissimilarity_matrix[0],
+      #   self.num_eps_tuning_value,
+      # )[1:],
+      eps_list=[0.522602798302096 if source_airport == 'NZCH'
+                else 1.58306526095708 if source_airport == 'YBBN'
+                else 1.90934362315554
+                ],
       min_sample_list=min_samples,
       source=source_airport, des=des_airport)
     end_tuning = datetime.now()
@@ -445,7 +449,7 @@ class AutomatedTrajectoryClustering(object):
     """
     self.agg_cluster_viz(
       labels=self.sil_labels,
-      title="Clusters' Aggregation for OD pair (%s-%s) based on Silhouette" % (
+      title="Clusters' Aggregation for flights of %s-%s" % (
         source_airport, des_airport),
       pic="%s/%s_%s_%s_agg.png" % (
         self.storage_path, source_airport, des_airport,
@@ -454,7 +458,7 @@ class AutomatedTrajectoryClustering(object):
     )
     self.agg_cluster_viz(
       labels=self.sil_db_labels,
-      title="Clusters' Aggregation for OD pair (%s-%s) based on Silhouette and Davies-Bouldin" % (
+      title="Clusters' Aggregation for flights of %s-%s" % (
         source_airport, des_airport),
       pic="%s/%s_%s_%s_agg.png" % (
         self.storage_path, source_airport, des_airport,
@@ -463,7 +467,7 @@ class AutomatedTrajectoryClustering(object):
     )
     self.agg_cluster_viz(
       labels=self.three_indices_labels,
-      title="Clusters' Aggregation for OD pair (%s-%s) based on Three indices" % (
+      title="Clusters' Aggregation for OD pair flights of %s-%s" % (
         source_airport, des_airport),
       pic="%s/%s_%s_%s_agg.png" % (
         self.storage_path, source_airport, des_airport,
@@ -586,13 +590,13 @@ class AutomatedTrajectoryClustering(object):
     plt.title(title)
     fig = plt.gcf()
     fig.set_size_inches((11, 8.5), forward=False)
-    fig.savefig(pic, dpi=500)
+    fig.savefig(pic, dpi=90)
     plt.close()
 
   def agg_cluster_viz(self, labels, title='', pic='', use_original=False):
     plt.style.use('ggplot')
     colorset = cycle(['purple', 'green', 'red', 'blue', 'orange'])
-    for cluster_num in set(labels) - set([-1]):
+    for cluster_num in set(labels):
       clr = next(colorset)
       i_flights = pd.DataFrame(
         self.dissimilarity_matrix)[labels == cluster_num].index.values
@@ -600,24 +604,35 @@ class AutomatedTrajectoryClustering(object):
       lats_append = []
       for i in i_flights:
         flight = self.__process_data[self.le_flight_id.inverse_transform(i)]
+        ''' Plot original trajectories in grey '''
+        plt.scatter(
+          list(flight['lon']), list(flight['lat']),
+          color='grey', marker='o', s=20, alpha=0.8, zorder=-1
+        )
+        ''' We won't aggregate outlier cluster but viz origin trajectory '''
+        if cluster_num == -1:
+          continue
         if use_original:
           lons_append.append(list(flight['lon']))
           lats_append.append(list(flight['lat']))
         else:
           lons_append.append(list(flight['inter_lon']))
           lats_append.append(list(flight['inter_lat']))
+      ''' We won't aggregate outlier cluster but viz origin trajectory '''
+      if cluster_num == -1:
+        continue
       lons_array, lats_array = np.array(lons_append), np.array(lats_append)
       lon = np.mean(lons_array, axis=0)
       lat = np.mean(lats_array, axis=0)
       plt.scatter(
         lon, lat,
-        color=clr, marker='o', s=20)
+        color=clr, marker='o', s=20, zorder=1)
     plt.xlabel("Longitude")
     plt.ylabel("Latitude")
     plt.title(title)
     fig = plt.gcf()
     fig.set_size_inches((11, 8.5), forward=False)
-    fig.savefig(pic, dpi=500)
+    fig.savefig(pic, dpi=90)
     plt.close()
 
   @classmethod
@@ -635,7 +650,7 @@ class AutomatedTrajectoryClustering(object):
     plt.title(title)
     fig = plt.gcf()
     fig.set_size_inches((11, 8.5), forward=False)
-    fig.savefig(pic_name, dpi=500)
+    fig.savefig(pic_name, dpi=90)
     # plt.show()
     plt.close()
 
