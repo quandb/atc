@@ -69,38 +69,6 @@ class AutomatedTrajectoryClustering(object):
       return frechetDist(u, v)
     return max(directed_hausdorff(u, v)[0], directed_hausdorff(v, u)[0])
 
-  def analize_distance_between_terminals(self, flight_data):
-    unique_flight_ids = flight_data[self.flight_column].unique()
-    distances = []
-    for flight_id in unique_flight_ids:
-      ter_dis = {}
-      ter_dis['flight_id'] = flight_id
-      process_flight = flight_data[flight_data[self.flight_column] == flight_id]
-      lats = list(process_flight[self.lat_column])
-      lons = list(process_flight[self.lon_column])
-      ter_dis['depart'] = (lons[0], lats[0])
-      ter_dis['land'] = (lons[-1], lats[-1])
-      ter_dis['distance'] = euclidean_distances(
-        [ter_dis['depart']], [ter_dis['land']])[0][0]
-      distances.append(ter_dis)
-    just_dis = [i['distance'] for i in distances]
-    print("Describe", pd.Series(just_dis).describe())
-    print("Values: ", just_dis)
-
-  def sum_the_ternimal_trajectories(self, flight_data):
-    depart_flight = flight_data.drop_duplicates(
-      subset=self.flight_column, keep='first')
-    plt.scatter(depart_flight[self.lon_column], depart_flight[self.lat_column])
-    plt.show()
-    land_flight = flight_data.drop_duplicates(
-      subset=self.flight_column, keep='last')
-    plt.scatter(land_flight[self.lon_column], land_flight[self.lat_column])
-    plt.show()
-    print("Depart Lat Sum:", depart_flight[self.lat_column].describe())
-    print("Depart Lon Sum:", depart_flight[self.lon_column].describe())
-    print("Landing Lat Sum:", land_flight[self.lat_column].describe())
-    print("Landing Lon Sum:", land_flight[self.lon_column].describe())
-
   def detect_abnormal_flight_clustering(self, flight_data, is_viz=False):
     """
     Detect flights that depart and land out of terminal
@@ -120,7 +88,6 @@ class AutomatedTrajectoryClustering(object):
     terminal_coors = terminal_flights[
       [self.lon_column, self.lat_column]].as_matrix()
     min_sample = int(len(land_flights) / 2)
-    # print(terminal_coors)
     labels = DBSCAN(
       min_samples=min_sample,
       n_jobs=-1).fit_predict(terminal_coors)
@@ -145,79 +112,25 @@ class AutomatedTrajectoryClustering(object):
       fig = plt.gcf()
       fig.set_size_inches((11, 8.5), forward=False)
       plt.show()
-
     return outlier_flights
-
-  def detect_abnormal_flight_by_coor(self, flight_data, keep):
-    """
-    Detect flights that depart and land out of terminal
-    Args:
-      flight_data (pd DataFrame): flight data from source to des
-      keep (str): keep must be either 'first' or 'last'
-
-    Returns:
-      pd DataFrame: filtered flight data
-
-    """
-    assert keep in ['first', 'last']
-    unique_flights = flight_data.drop_duplicates(
-      subset=self.flight_column, keep=keep)
-    mean_lat = unique_flights[self.lat_column].mean()
-    std_lat = unique_flights[self.lat_column].std()
-    mean_lon = unique_flights[self.lon_column].mean()
-    std_lon = unique_flights[self.lon_column].std()
-    ''' No abnormal with small std '''
-    if std_lat < 0.05 and std_lon < 0.05:
-      return []
-    abnormal_flights = []
-    for lat, lon, flight_id in zip(unique_flights[self.lat_column],
-                                   unique_flights[self.lon_column],
-                                   unique_flights[self.flight_column]):
-      if not ((mean_lat - 0.5 * std_lat <= lat <= mean_lat + 0.5 * std_lat) and
-              (mean_lon - 1 * std_lon <= lon <= mean_lon + 1 * std_lon)):
-        abnormal_flights.append(flight_id)
-    return abnormal_flights
-
-  def detect_abnormal_flight_by_distances(self, flight_data):
-    """
-    Detect flights that depart and land out of terminal
-    Args:
-      flight_data (pd DataFrame): flight data from source to des
-
-    Returns:
-      pd DataFrame: filtered flight data
-
-    """
-    unique_flight_ids = flight_data[self.flight_column].unique()
-    distances = []
-    for flight_id in unique_flight_ids:
-      ter_dis = {}
-      ter_dis['flight_id'] = flight_id
-      process_flight = flight_data[flight_data[self.flight_column] == flight_id]
-      lats = list(process_flight[self.lat_column])
-      lons = list(process_flight[self.lon_column])
-      ter_dis['depart'] = (lons[0], lats[0])
-      ter_dis['land'] = (lons[-1], lats[-1])
-      ter_dis['distance'] = euclidean_distances(
-        [ter_dis['depart']], [ter_dis['land']])[0][0]
-      distances.append(ter_dis)
-    just_dis = pd.Series([i['distance'] for i in distances])
-    mean_dis = just_dis.mean()
-    std_dis = just_dis.std()
-    if std_dis < 0.05:
-      return []
-    abnormal_flights = []
-    for item in distances:
-      if not mean_dis - 0.5 * std_dis <= item['distance'] <= mean_dis + 1 * std_dis:
-        abnormal_flights.append(item['flight_id'])
-
-    return abnormal_flights
 
   def create_a_home_folder(self, source, des):
     self.storage_path = "%s/%s_%s" % (self.storage_path, source, des)
     os.makedirs(self.storage_path, exist_ok=True)
 
   def run(self, source_airport, des_airport, num_points, is_plot, k=3, der=0, locker=None):
+    """
+    Run the application function for the entire process
+    Args:
+      source_airport (str): Source airport value
+      des_airport (str): Destination airport value
+      num_points (int): Number of points for interpolating
+      is_plot (bool): Plot th outcome
+      k (int):
+      der (int):
+      locker (object):
+
+    """
     start_time = datetime.now()
     self.prefix = "%s-%s: " % (source_airport, des_airport)
     self.__process_data = {}
@@ -339,14 +252,14 @@ class AutomatedTrajectoryClustering(object):
     """
     Initialize min sample value for training clustering model
     Args:
-        source_airport (str): Source Airport
-        des_airport (str): Destination Airport
-        num_of_flights (int): Number of unique flights between OD pair
-        pre_observed (boolean): hard values if using flag is true,
-            o/w self-adapt to current values
+      source_airport (str): Source Airport
+      des_airport (str): Destination Airport
+      num_of_flights (int): Number of unique flights between OD pair
+      pre_observed (boolean): hard values if using flag is true,
+          o/w self-adapt to current values
 
     Returns:
-        list[int]: List contains min sample values
+      list[int]: List contains min sample values
 
     """
     if pre_observed:
@@ -362,11 +275,11 @@ class AutomatedTrajectoryClustering(object):
     """
     Visualize the original tracks
     Args:
-        source_airport (str): Source Airport
-        des_airport (str): Destination Airport
+      source_airport (str): Source Airport
+      des_airport (str): Destination Airport
 
     Returns:
-        None
+      None
 
     """
     self.coordinate_viz(
@@ -390,14 +303,14 @@ class AutomatedTrajectoryClustering(object):
     """
     Visualize clusters that identified by algorithm
     Args:
-        source_airport (str): Source Airport
-        des_airport (str): Des Airport
-        sil_score (float): Score value by Silhouette Index
-        sil_db_score (float): Score value by Davies-Boudlin index
-        three_indices_score (float): Score value by three indices
+      source_airport (str): Source Airport
+      des_airport (str): Des Airport
+      sil_score (float): Score value by Silhouette Index
+      sil_db_score (float): Score value by Davies-Boudlin index
+      three_indices_score (float): Score value by three indices
 
     Returns:
-        None
+      None
 
     """
     self.cluster_viz(
@@ -433,14 +346,14 @@ class AutomatedTrajectoryClustering(object):
     """
     Visualize aggregated clusters that identified by algorithm
     Args:
-        source_airport (str): Source Airport
-        des_airport (str): Des Airport
-        sil_score (float): Score value by Silhouette Index
-        sil_db_score (float): Score value by Davies-Boudlin index
-        three_indices_score (float): Score value by three indices
+      source_airport (str): Source Airport
+      des_airport (str): Des Airport
+      sil_score (float): Score value by Silhouette Index
+      sil_db_score (float): Score value by Davies-Boudlin index
+      three_indices_score (float): Score value by three indices
 
     Returns:
-        None
+      None
 
     """
     self.agg_cluster_viz(
@@ -478,6 +391,20 @@ class AutomatedTrajectoryClustering(object):
   def auto_tuning(self,
                   eps_list, min_sample_list, source, des,
                   tune_plot=True, with_outlier=False):
+    """
+    Tuning the parameter with store and find the best params
+    Args:
+      eps_list:
+      min_sample_list:
+      source:
+      des:
+      tune_plot:
+      with_outlier:
+
+    Returns:
+      (float, float, float): best scores of silhouette, sil-db, and three idx
+
+    """
     tuning_res = []
     tuning_res_append = tuning_res.append
     best_sil_score = -1
@@ -565,6 +492,7 @@ class AutomatedTrajectoryClustering(object):
     return best_sil_score, best_sil_db_score, best_three_indices_score
 
   def cluster_viz(self, labels, title='', pic='', use_original=True):
+    """Visualize detected clusters"""
     plt.style.use('ggplot')
     colorset = cycle(['purple', 'green', 'red', 'blue', 'orange'])
     for cluster_num in np.unique(labels):
@@ -590,6 +518,9 @@ class AutomatedTrajectoryClustering(object):
     plt.close()
 
   def agg_cluster_viz(self, labels, title='', pic='', use_original=False):
+    """
+    Visualize the aggregated clusters
+    """
     plt.style.use('ggplot')
     colorset = cycle(['purple', 'green', 'red', 'blue', 'orange'])
     for cluster_num in set(labels) - set([-1]):
@@ -636,30 +567,14 @@ class AutomatedTrajectoryClustering(object):
     fig = plt.gcf()
     fig.set_size_inches((11, 8.5), forward=False)
     fig.savefig(pic_name, dpi=500)
-    # plt.show()
     plt.close()
 
   @classmethod
   def interpolate_data(cls, lat, lon, time, time_sample, der=0, k=3):
     """
-    Transform original data into uniform distribution
-    Args:
-      lat:
-      lon:
-      time:
-      time_sample:
-      der:
-      k:
-
-    Returns:
-
+    Apply cubic-spline for transforming original data into uniform distribution
     """
-    # print("Time Increase: %s" % time.is_monotonic_increasing)
-    # t = time.tolist()
-    # for i in range(len(t)-1):
-    #   if t[i] > t[i+1]:
-    #     print('\t', '%s/%s' % (i, len(t)), t[i], t[i+1])
-    # ''' Apply cubic-spline '''
+
     try:
       ''' lon = f(time) '''
       lon_tck = interpolate.splrep(time.tolist(), lon, s=0, k=k)
@@ -681,10 +596,9 @@ class AutomatedTrajectoryClustering(object):
       num_points (int): number of points
 
     Returns:
-      list
+      list: Sample values with specific number
 
     """
-    # sample_value = signal.resample(values, num_points)
     step_size = (max(values) - min(values)) * 1. / num_points
     sample_value = np.arange(min(values), max(values), step_size)
     return sample_value[:num_points]
