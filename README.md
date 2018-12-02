@@ -106,7 +106,6 @@ Where:
 * `flagfile`: Show stored the configurations
 * `monitor.log`: Store the logs of the app
 * `NZCH_WSSS_original_coordinates.png`: Plot the original trajectories
-<img src="images/NZCH_WSSS_original_coordinates.png" height="24" width="48">
 ![Original Trajectories](images/NZCH_WSSS_original_coordinates.png)
 * `NZCH_WSSS_interpolated_coordinates.png`: Plot the interpolated trajectories
 ![Interpolated Trajectories](images/NZCH_WSSS_interpolated_coordinates.png)
