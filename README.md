@@ -10,7 +10,6 @@ Here's the detailed flow of our framework:
 # INSTALLATION
 ### Install python3
 
-
 ### Install dependencies
 ```text
 matplotlib == 2.0.2
@@ -52,7 +51,6 @@ All the inputs information will be indicated in `flags.txt` file, for instance:
 --storage_path=/tmp/atc/ds/result
 --flights_data=/tmp/atc/ds/adsb_tracks.csv
 
-
 # Algorithm input
 --num_eps_tuning_value=100
 --is_used_frechet=True
@@ -62,21 +60,21 @@ All the inputs information will be indicated in `flags.txt` file, for instance:
 
 ```
 Where:
-* lat_column: Column name of the Track's Latitude
-* lon_column: Column name of Track's Longitude
-* source_column: Column name of Source airport
-* source_airport: Source airport value of the flight
-* des_airport: Destination airport value of the flight
-* des_column: Column name of Destination airport
-* time_column: Column name of time for the flight track
-* flight_id_column: Column name of flight id
-* storage_path: Path to folder to store the outcome
-* flights_data: Full path to the trajectory file
-* num_eps_tuning_value: Number of eps values for tuning
-* is_used_frechet: Apply frechet distance for measuring the curves' distance
-* is_plot: Plot the result or not
-* is_interpolated: Apply interpolation or not
-* num_points: Number of interpolated points for each flight
+* `lat_column`: Column name of the Track's Latitude
+* `lon_column`: Column name of Track's Longitude
+* `source_column`: Column name of Source airport
+* `source_airport`: Source airport value of the flight
+* `des_airport`: Destination airport value of the flight
+* `des_column`: Column name of Destination airport
+* `time_column`: Column name of time for the flight track
+* `flight_id_column`: Column name of flight id
+* `storage_path`: Path to folder to store the outcome
+* `flights_data`: Full path to the trajectory file
+* `num_eps_tuning_value`: Number of eps values for tuning
+* `is_used_frechet`: Apply frechet distance for measuring the curves' distance
+* `is_plot`: Plot the result or not
+* `is_interpolated`: Apply interpolation or not
+* `num_points`: Number of interpolated points for each flight
 
 
 # RESULTS
@@ -109,7 +107,7 @@ Where:
 * `monitor.log`: Store the logs of the app
 * `NZCH_WSSS_original_coordinates.png`: Plot the original trajectories
 <img src="images/NZCH_WSSS_original_coordinates.png" height="24" width="48">
-
+![Original Trajectories](images/NZCH_WSSS_original_coordinates.png)
 * `NZCH_WSSS_interpolated_coordinates.png`: Plot the interpolated trajectories
 ![Interpolated Trajectories](images/NZCH_WSSS_interpolated_coordinates.png)
 * `NZCH_WSSS_silhouette_0.938004185317.png`: Plot the detected clusters
