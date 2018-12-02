@@ -112,10 +112,8 @@ def run():
             num_eps_tuning_value=num_eps_tuning_value_flag.value(),
         )
         atc_handler = AutomatedTrajectoryClustering(**params)
-        # print_progress_bar(i+1, len(source_airport_flag.value()))
         logging.info(
             "\n\nProcess pair (%s - %s)" % (source_airport, des_airport))
-        print("\n\nProcess pair (%s - %s)" % (source_airport, des_airport))
         try:
             atc_handler.run(
                 source_airport=source_airport,
@@ -127,7 +125,6 @@ def run():
             logging.error(e)
         finally:
             del atc_handler
-
     logging.info("\n\nDONE")
 
 

@@ -86,7 +86,6 @@ def atc_interface(params):
     des_airport = params.pop('des_airport')
     locker = params.pop('locker')
     atc_handler = AutomatedTrajectoryClustering(**params)
-    # print_progress_bar(i+1, len(source_airport_flag.value()))
     logging.info("\n\nProcess pair (%s - %s)" % (source_airport, des_airport))
     print("\n\nProcess pair (%s - %s)" % (source_airport, des_airport))
     try:
