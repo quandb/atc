@@ -25,7 +25,7 @@ six == 1.10.0
 Set *PYTHONPATH* to code repos folder. For instance, the code repos folder is `/tmp/atc` the the command should be:
 
 ```bash
-export PYTHONPATH=$PYTHONPATH:/tmp/atc
+export PYTHONPATH=$PYTHONPATH:/tmp
 ```
 
 # USAGE
@@ -76,6 +76,16 @@ Where:
 * `is_interpolated`: Apply interpolation or not
 * `num_points`: Number of interpolated points for each flight
 
+## Quick Installations and Usage
+### Clone source code
+```bash
+git clone git@github.com:quandb/atc.git
+```
+
+### All in one script for Ubuntu
+```bash
+bash atc/run.sh path-to-flagfile
+```
 
 # RESULTS
 All the outcome of the application can be collecting in the `storage_path` folder as below:
